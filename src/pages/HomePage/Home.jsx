@@ -12,6 +12,7 @@ import Timer from "../../widgets/Timer/Timer";
 import ResponsiveCard from "../../widgets/Cards/Cards";
 import { Typography } from "@mui/material";
 import { BrowserRouter as Router } from 'react-router-dom';
+import ProcurementNotices from "../../widgets/Notices/Notices";
 
 const Home = () => {
   return (
@@ -43,6 +44,7 @@ const Home = () => {
               </Typography>
             </Typography>
             <ResponsiveCard />
+              <ProcurementNotices/>
             <ResponsiveStack>
               <CustomWidget1 />
               <CustomWidget2 />
@@ -61,7 +63,6 @@ const Home = () => {
             >
               INFO <span style={{ color: "#673de6" }}>DESK</span>
             </Typography>
-
             <ResponsiveStack>
               <IconGrid />
               <Accordion />
