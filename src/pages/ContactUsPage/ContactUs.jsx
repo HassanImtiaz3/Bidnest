@@ -1,6 +1,9 @@
 import React from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
+import { sendEmail } from "../../services/Contact";
+import { useState } from "react";
+
 import {
   Box,
   Stack,
@@ -14,6 +17,27 @@ import {
 import { MailOutline, LocationOn, Phone } from "@mui/icons-material";
 
 function ContactUs() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [responseMsg, setResponseMsg] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setResponseMsg("Sending...");
+
+    const response = await sendEmail(formData); // Call the separate function
+    setResponseMsg(response.message);
+  };
+
   return (
     <>
       <div className="d-flex flex-column min-vh-100">
@@ -58,7 +82,7 @@ function ContactUs() {
                     fontWeight: "bold",
                     color: (theme) => theme.palette.primary.main,
                     marginBottom: 2,
-                    fontSize: { xs: "1.2rem"},
+                    fontSize: { xs: "1.2rem" },
                   }}
                 >
                   Contact Us
@@ -93,6 +117,7 @@ function ContactUs() {
                 </Typography>
 
                 {/* Email Contact Section */}
+
                 <Stack spacing={3}>
                   {/* Office Address */}
                   <Stack direction="row" spacing={3} alignItems="center">
@@ -103,13 +128,21 @@ function ContactUs() {
                         padding: 2,
                       }}
                     >
-                      <LocationOn sx={{ color: (theme) => theme.palette.primary.main, fontSize: 30 }} />
+                      <LocationOn
+                        sx={{
+                          color: (theme) => theme.palette.primary.main,
+                          fontSize: 30,
+                        }}
+                      />
                     </IconButton>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: "1000" }}>
                         Office Address:
                       </Typography>
-                      <Typography variant="body2" sx={{ marginTop: 0.5, color: "grey" }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ marginTop: 0.5, color: "grey" }}
+                      >
                         [Your Company Address Here]
                       </Typography>
                     </Box>
@@ -124,13 +157,21 @@ function ContactUs() {
                         padding: 2,
                       }}
                     >
-                      <Phone sx={{ color: (theme) => theme.palette.primary.main, fontSize: 30 }} />
+                      <Phone
+                        sx={{
+                          color: (theme) => theme.palette.primary.main,
+                          fontSize: 30,
+                        }}
+                      />
                     </IconButton>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: "1000" }}>
                         Phone:
                       </Typography>
-                      <Typography variant="body2" sx={{ marginTop: 0.5, color: "grey" }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ marginTop: 0.5, color: "grey" }}
+                      >
                         [Your Contact Number]
                       </Typography>
                     </Box>
@@ -145,13 +186,21 @@ function ContactUs() {
                         padding: 2,
                       }}
                     >
-                      <MailOutline sx={{ color: (theme) => theme.palette.primary.main, fontSize: 30 }} />
+                      <MailOutline
+                        sx={{
+                          color: (theme) => theme.palette.primary.main,
+                          fontSize: 30,
+                        }}
+                      />
                     </IconButton>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: "1000" }}>
                         Email:
                       </Typography>
-                      <Typography variant="body2" sx={{ marginTop: 0.5, color: "grey" }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ marginTop: 0.5, color: "grey" }}
+                      >
                         support@bidnest.com
                       </Typography>
                     </Box>
@@ -175,103 +224,120 @@ function ContactUs() {
                     width: "100%",
                     maxWidth: 450,
                     boxShadow: 1,
-                    padding: {xs : 0 , md: 5, xl :5 },
+                    padding: { xs: 0, md: 5, xl: 5 },
                   }}
                 >
-                  <CardContent>
-                    {/* Form */}
-                    <Stack spacing={2}>
-                      {/* Name */}
-                      <TextField
-                        label="Name"
-                        variant="outlined"
-                        fullWidth
-                        required
-                        sx={{
-                          borderRadius: 2,
-                          "& .MuiInputBase-root": {
-                            backgroundColor: "transparent", // Make sure the background is transparent (default behavior)
-                            color: "text.primary", // Set the text color to the primary text color
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "text.primary", // Set the label color to the primary text color
-                          },
-                        }}
-                      />
+                  <form onSubmit={handleSubmit}>
+                    <CardContent>
+                      {/* Form */}
+                      <Stack spacing={2}>
+                        {/* Name */}
+                        <TextField
+                          label="Name"
+                          name="name"
+                          variant="outlined"
+                          fullWidth
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          sx={{
+                            borderRadius: 2,
+                            "& .MuiInputBase-root": {
+                              backgroundColor: "transparent",
+                              color: "text.primary",
+                            },
+                            "& .MuiInputLabel-root": {
+                              color: "text.primary",
+                            },
+                          }}
+                        />
 
-                      {/* Email */}
-                      <TextField
-                        label="Email"
-                        type="email"
-                        variant="outlined"
-                        fullWidth
-                        required
-                        sx={{
-                          borderRadius: 2,
-                          "& .MuiInputBase-root": {
-                            backgroundColor: "transparent", // Make sure the background is transparent (default behavior)
-                            color: "text.primary", // Set the text color to the primary text color
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "text.primary", // Set the label color to the primary text color
-                          },
-                        }}
-                      />
+                        {/* Email */}
+                        <TextField
+                          label="Email"
+                          name="email"
+                          type="email"
+                          variant="outlined"
+                          fullWidth
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          sx={{
+                            borderRadius: 2,
+                            "& .MuiInputBase-root": {
+                              backgroundColor: "transparent",
+                              color: "text.primary",
+                            },
+                            "& .MuiInputLabel-root": {
+                              color: "text.primary",
+                            },
+                          }}
+                        />
 
-                      {/* Phone Number */}
-                      <TextField
-                        label="Phone Number"
-                        type="phone"
-                        variant="outlined"
-                        fullWidth
-                        required
-                        sx={{
-                          borderRadius: 2,
-                          "& .MuiInputBase-root": {
-                            backgroundColor: "transparent", // Make sure the background is transparent (default behavior)
-                            color: "text.primary", // Set the text color to the primary text color
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "text.primary", // Set the label color to the primary text color
-                          },
-                        }}
-                      />
+                        {/* Phone Number */}
+                        <TextField
+                          label="Phone Number"
+                          name="phone"
+                          type="text"
+                          variant="outlined"
+                          fullWidth
+                          required
+                          value={formData.phone}
+                          onChange={handleChange}
+                          sx={{
+                            borderRadius: 2,
+                            "& .MuiInputBase-root": {
+                              backgroundColor: "transparent",
+                              color: "text.primary",
+                            },
+                            "& .MuiInputLabel-root": {
+                              color: "text.primary",
+                            },
+                          }}
+                        />
 
-                      {/* Message */}
-                      <TextField
-                        label="Message"
-                        variant="outlined"
-                        multiline
-                        rows={4}
-                        fullWidth
-                        required
-                        sx={{
-                          borderRadius: 2,
-                          "& .MuiInputBase-root": {
-                            backgroundColor: "transparent", // Make sure the background is transparent (default behavior)
-                            color: "text.primary", // Set the text color to the primary text color
-                          },
-                          "& .MuiInputLabel-root": {
-                            color: "text.primary", // Set the label color to the primary text color
-                          },
-                        }}
-                      />
+                        {/* Message */}
+                        <TextField
+                          label="Message"
+                          name="message"
+                          variant="outlined"
+                          multiline
+                          rows={4}
+                          fullWidth
+                          required
+                          value={formData.message}
+                          onChange={handleChange}
+                          sx={{
+                            borderRadius: 2,
+                            "& .MuiInputBase-root": {
+                              backgroundColor: "transparent",
+                              color: "text.primary",
+                            },
+                            "& .MuiInputLabel-root": {
+                              color: "text.primary",
+                            },
+                          }}
+                        />
 
-                      {/* Send Message Button */}
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        sx={{
-                          marginTop: 4,
-                          padding: 1.5,
-                          borderRadius: 3,
-                        }}
-                      >
-                        Send Message
-                      </Button>
-                    </Stack>
-                  </CardContent>
+                        {/* Send Message Button */}
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          fullWidth
+                          sx={{
+                            marginTop: 4,
+                            padding: 1.5,
+                            borderRadius: 3,
+                          }}
+                        >
+                          Send Message
+                        </Button>
+                      </Stack>
+                    </CardContent>
+
+                    {responseMsg && <p>{responseMsg}</p>}
+                  </form>
                 </Card>
               </Box>
             </Stack>
