@@ -55,7 +55,7 @@ function ResponsiveAppBar() {
   const pages = [
     { title: "Bid Search", path: "/bid-search" },
     { title: "Participating Agencies", path: "/participanting-agencies" },
-    { title: "About Us", path: "/about-us" },
+    { title: "About Bidnest", path: "/about-us" },
     { title: "Contact Us", path: "/contact-us" },
     { title: "Why Bidnest ?", path: "/why-bidnest" },
 
@@ -186,6 +186,7 @@ function ResponsiveAppBar() {
 
                   {/* Logout Button */}
                   <Button
+                  className='buttonDesign'
                     variant="contained"
                     color="secondary"
                     sx={{
@@ -205,7 +206,7 @@ function ResponsiveAppBar() {
                     sx={{
                       mx: 1,
                       border: 1,
-                      borderColor: theme.palette.primary.main,
+                      borderColor: theme.palette.primary,
                       backgroundColor: "transparent",
                       color: theme.palette.text.primary,
                       "&:hover": {
@@ -218,6 +219,7 @@ function ResponsiveAppBar() {
                     Login
                   </Button>
                   <Button
+                  className='buttonDesign'
                     sx={{
                       mx: 1,
                       backgroundColor: theme.palette.primary.main,

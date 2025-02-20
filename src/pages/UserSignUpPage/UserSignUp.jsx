@@ -342,6 +342,7 @@ const RegistrationForm = () => {
 
           <Box textAlign="left">
             <Button
+            className='buttonDesign'
               variant="contained"
               color="primary"
               size="large"

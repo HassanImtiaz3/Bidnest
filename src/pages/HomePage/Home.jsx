@@ -11,8 +11,8 @@ import IconGrid from "../../widgets/IconGrid/IconGrid";
 import Timer from "../../widgets/Timer/Timer";
 import ResponsiveCard from "../../widgets/Cards/Cards";
 import { Typography } from "@mui/material";
-import { BrowserRouter as Router } from 'react-router-dom';
 import ProcurementNotices from "../../widgets/Notices/Notices";
+import EnrollmentSection from '../../widgets/UserOnboarding/Onboarding'
 
 const Home = () => {
   return (
@@ -33,9 +33,9 @@ const Home = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  fontWeight: "500", // Regular weight for the paragraph
-                  fontSize: { xs: "16px", sm: "18px", md: "20px" }, // Responsive font size
-                  marginTop: 2, // Adds spacing between the title and the paragraph
+                  fontWeight: "500", 
+                  fontSize: { xs: "16px", sm: "18px", md: "20px" }, 
+                  marginTop: 2, 
                 }}
               >
                 Winning bids starts with quality responses. It’s not enough to
@@ -44,11 +44,12 @@ const Home = () => {
               </Typography>
             </Typography>
             <ResponsiveCard />
-              <ProcurementNotices/>
+            <ProcurementNotices/>
             <ResponsiveStack>
               <CustomWidget1 />
               <CustomWidget2 />
             </ResponsiveStack>
+            <EnrollmentSection/>
             <div />
           </div>
           <Timer />

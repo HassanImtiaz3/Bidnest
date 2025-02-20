@@ -18,19 +18,24 @@ export default function CustomWidget() {
       }}
     >
       <Typography
-        variant="h5"
+        variant="h1"
         sx={{
-          fontWeight: "1000",
+          fontWeight: "950",
           marginBottom: "16px",
           textAlign: "left",
-          fontSize: { xs: "16px", sm: "18px", md: "30px" }, // Responsive font size
+          fontSize: { xs: "24px", sm: "32px", md: "40px" }, // Responsive font size
         }}
       >
-        We make it easy to find relevant bids.
+        We make it easy to find Relevant Bids.
       </Typography>
       <Typography
         variant="body1"
-        sx={{ marginBottom: "24px", textAlign: "left", xs: "16px", sm: "18px", md: "20px" , fontWeight: "500" }}
+        sx={{
+          marginBottom: "24px",
+          textAlign: "left",
+          fontSize: { xs: "16px", sm: "18px", md: "17px" },
+          fontWeight: "500",
+        }}
       >
         Bidnet direct offers your company a centralized location to gain instant
         access to bid opportunities from state departments, local
@@ -39,12 +44,18 @@ export default function CustomWidget() {
         can focus on winning more government business.
       </Typography>
       <Button
-      onClick={() => {
-        navigate('/user'); // Navigate to /user route
-      }}
-    >
-      Register Now
-    </Button>
+      className='buttonDesign'
+        sx={{
+          fontSize: { xs: "16px", sm: "18px", md: "17px" },
+          fontWeight: "500",
+          
+        }}
+        onClick={() => {
+          navigate("/user"); 
+        }}
+      >
+        Register Now
+      </Button>
     </Box>
   );
 }

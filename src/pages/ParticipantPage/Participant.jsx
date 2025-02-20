@@ -151,6 +151,7 @@ const ParticipatingAgenciesSection = () => {
               {filteredAgencies.length > agenciesPerPage && (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                   <Button
+                  className='buttonDesign'
                     variant="contained"
                     onClick={() => setCurrentPage((prev) => prev - 1)}
                     disabled={currentPage === 1}
@@ -165,6 +166,7 @@ const ParticipatingAgenciesSection = () => {
                     Page {currentPage} of {totalPages}
                   </Typography>
                   <Button
+                  className='buttonDesign'
                     variant="contained"
                     onClick={() => setCurrentPage((prev) => prev + 1)}
                     disabled={currentPage === totalPages}

@@ -42,9 +42,10 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
         {/* Text Column */}
         <Box flex={1}>
           <Typography
-            variant="h3"
+            variant="h1"
             sx={{
-              fontWeight: "1000",
+              fontWeight: "950", 
+              fontSize: { xs: "24px", sm: "32px", md: "40px" },
               mb: 2,
               color: "primary.main",
               textAlign: { xs: "center", md: "left" },
@@ -57,6 +58,8 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
             sx={{
               color: "text.primary",
               textAlign: { xs: "center", md: "left" },
+              fontWeight: "500", 
+              fontSize: { xs: "16px", sm: "18px", md: "18px" },
             }}
           >
             {paragraph}

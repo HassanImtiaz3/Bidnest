@@ -53,7 +53,7 @@ export default function VerticalLinearStepper() {
               sx={{
                 '& .MuiStepLabel-label': {
                   fontWeight: '950', 
-                  fontSize: '1.2rem'
+                  fontSize: { xs: "16px", sm: "18px", md: "30px" }, 
                 }
               }}
               optional={
@@ -65,9 +65,16 @@ export default function VerticalLinearStepper() {
               {step.label}
             </StepLabel>
             <StepContent align="left">
-              <Typography>{step.description}</Typography>
+              <Typography
+               variant="body1"
+               sx={{
+                 fontWeight: "500", 
+                 fontSize: { xs: "16px", sm: "18px", md: "17px" }, 
+               }}
+              >{step.description}</Typography>
               <Box sx={{ mb: 2 }}>
                 <Button
+                className='buttonDesign'
                   variant="contained"
                   onClick={handleNext}
                   sx={{ mt: 1, mr: 1 }}
@@ -75,6 +82,7 @@ export default function VerticalLinearStepper() {
                   {index === steps.length - 1 ? 'Finish' : 'Continue'}
                 </Button>
                 <Button
+                
                   disabled={index === 0}
                   onClick={handleBack}
                   sx={{ mt: 1, mr: 1 }}
@@ -89,7 +97,7 @@ export default function VerticalLinearStepper() {
       {activeStep === steps.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }} className='buttonDesign'>
             Reset
           </Button>
         </Paper>

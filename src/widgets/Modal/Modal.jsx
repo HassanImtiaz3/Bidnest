@@ -25,6 +25,7 @@ export default function AuthModal({ open, handleClose, type, navigate }) {
           {type === "login" ? (
             <>
               <Button
+              className='buttonDesign'
                 sx={{ mb: 2, width: "100%" }}
                 variant="contained"
                 onClick={() => navigate("/user/login")}
@@ -32,6 +33,7 @@ export default function AuthModal({ open, handleClose, type, navigate }) {
                 Login as User
               </Button>
               <Button
+              className='buttonDesign'
                 sx={{ width: "100%" }}
                 variant="outlined"
                 onClick={() => navigate("/login")}
@@ -42,6 +44,7 @@ export default function AuthModal({ open, handleClose, type, navigate }) {
           ) : (
             <>
               <Button
+              className='buttonDesign'
                 sx={{ mb: 2, width: "100%" }}
                 variant="contained"
                 onClick={() => navigate("/user")}
@@ -49,6 +52,7 @@ export default function AuthModal({ open, handleClose, type, navigate }) {
                 Sign Up as User
               </Button>
               <Button
+              className='buttonDesign'
                 sx={{ width: "100%" }}
                 variant="outlined"
                 onClick={() => navigate("/registration")}

@@ -63,7 +63,7 @@ export default function WinSection() {
               textAlign: isMobile ? "center" : "right",
             }}
           >
-            <OutlineButton fullWidth={isMobile}>Register Now</OutlineButton>
+            <OutlineButton className='buttonDesign' fullWidth={isMobile}>Register Now</OutlineButton>
           </Box>
         </Stack>
       </Box>

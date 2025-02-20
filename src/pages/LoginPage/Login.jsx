@@ -122,6 +122,7 @@ function App() {
 
                 {/* Login Button */}
                 <Button
+                className='buttonDesign'
                   variant="contained"
                   color="primary"
                   size="large"

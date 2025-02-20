@@ -50,7 +50,7 @@ const ResponsiveCard = () => {
 
                 {/* Heading */}
                 <Typography
-                  variant="h5"
+                  variant="body1"
                   sx={{
                     fontWeight: "1000", // Extra bold font weight
                     fontSize: { xs: "16px", sm: "18px", md: "20px" }, // Responsive font size
@@ -65,6 +65,9 @@ const ResponsiveCard = () => {
                   sx={{
                     color: "text.secondary",
                     textAlign: "left", // Ensures description is left aligned
+                    fontSize: { xs: "16px", sm: "18px", md: "18px" }, 
+                    fontWeight: "500", 
+
                   }}
                 >
                   {card.description}

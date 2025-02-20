@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Typography,
   styled,
 } from "@mui/material";
 
@@ -49,18 +50,32 @@ const procurementData = [
 const HeaderCell = styled(TableCell)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   color: "white",
-  fontSize: 15,
-  fontWeight: 900,
+  fontWeight: "500", 
+  fontSize: { xs: "16px", sm: "18px", md: "17px" }, 
 }));
 
 const RegularCell = styled(TableCell)(({ theme }) => ({
   border: "1px dotted",
   borderColor: theme.palette.divider,
+  fontWeight: "500", 
+  fontSize: { xs: "16px", sm: "18px", md: "17px" }, 
 }));
 
 const ProcurementNotices = () => {
   return (
-    <Box
+    <>
+     <Typography
+        variant="h1"
+        sx={{
+          fontWeight: "1000",
+          padding: "50",
+          marginTop: 3,
+          fontSize: { xs: "24px", sm: "32px", md: "40px" },
+        }}
+      >
+        PROCRUMENT <span style={{ color: "#673de6" }}>NOTICES</span>
+      </Typography>
+      <Box
       sx={{
         width: "100%",
         overflow: "auto",
@@ -69,6 +84,7 @@ const ProcurementNotices = () => {
         marginBottom: 15,
       }}
     >
+     
       <TableContainer component={Paper} sx={{ maxHeight: 300 }}>
         <Table stickyHeader>
           <TableHead>
@@ -94,6 +110,8 @@ const ProcurementNotices = () => {
         </Table>
       </TableContainer>
     </Box>
+    </>
+   
   );
 };
 

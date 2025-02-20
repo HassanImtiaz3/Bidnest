@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import c1 from "../../assets/c1.jpg";
 import c2 from "../../assets/c2.jpg";
 import c3 from "../../assets/c3.webp";
@@ -13,6 +13,7 @@ function WhyBidnest() {
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
+       
         <Box
           sx={{
             position: "relative",
@@ -21,14 +22,15 @@ function WhyBidnest() {
             backgroundImage: `url(${why})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center top -50px",
+            backgroundPosition: "center",
+            maxHeight: "650px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-start",
-            px: 3,
+            justifyContent: "center",
+            paddingBottom: "12%",
+            paddingTop: "12%",
           }}
         >
-          {/* Black overlay */}
           <Box
             sx={{
               position: "absolute",
@@ -36,25 +38,21 @@ function WhyBidnest() {
               left: 0,
               width: "100%",
               height: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Black with 50% opacity
-              zIndex: 1, // Place it below the text
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark overlay
+              zIndex: 1,
             }}
           ></Box>
 
-          {/* Text content */}
-          <Typography
-            variant="h3"
+          <Box
             sx={{
-              fontWeight: "bold",
+              position: "relative",
+              zIndex: 2,
+              textAlign: "center",
               color: "white",
-              padding: 10,
-              zIndex: 2, // Place the text above the overlay
-              position: "relative", // Ensures proper stacking
             }}
           >
-            We make purchasing simple for <br /> public sector procurement{" "}
-            <br /> professionals and government <br /> contractors
-          </Typography>
+           
+          </Box>
         </Box>
 
         <Hero

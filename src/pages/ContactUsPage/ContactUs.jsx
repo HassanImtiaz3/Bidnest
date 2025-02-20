@@ -321,6 +321,7 @@ function ContactUs() {
 
                         {/* Send Message Button */}
                         <Button
+                        className='buttonDesign'
                           type="submit"
                           variant="contained"
                           color="primary"

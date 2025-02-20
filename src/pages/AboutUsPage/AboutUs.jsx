@@ -1,15 +1,106 @@
 import React from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
-import { Box, Stack, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Breadcrumbs,
+  Link,
+  Container,
+} from "@mui/material";
+
+const cardData = [
+  {
+    image: "/assets/local/Create.svg",
+    title: "Create",
+    description: "Awesome Experience",
+  },
+  {
+    image: "/assets/local/Communicate.svg",
+    title: "Communicate",
+    description: "Seamless Interaction",
+  },
+  {
+    image: "/assets/local/Connect.svg",
+    title: "Connect",
+    description: "Global Networking",
+  },
+];
+
+const CardItem = ({ image, title, description }) => (
+  <Box
+    sx={{
+      flex: 1,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "auto",
+    }}
+  >
+    <Card sx={{ maxWidth: 600, textAlign: "center", boxShadow: 3 }}>
+      <CardMedia component="img" height="350" image={image} alt={title} />
+      <CardContent>
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: { xs: "16px", sm: "18px", md: "25px" },
+            color: "gray",
+            fontWeight: "600",
+          }}
+        >
+          we
+        </Typography>
+        <Typography
+          variant="h1"
+          sx={{
+            fontSize: { xs: "24px", sm: "32px", md: "35px" },
+            fontWeight: "1000",
+          }}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{
+            fontSize: { xs: "16px", sm: "18px", md: "20px" },
+            color: "gray",
+            fontWeight: "600",
+          }}
+        >
+          {description}
+        </Typography>
+      </CardContent>
+    </Card>
+  </Box>
+);
 
 function AboutUs() {
   return (
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
-        <div className="flex-grow-1 mt-4">
-          {/* Wrapper Box to center the content */}
+        <Container sx={{ my: 2 }}>
+          <Breadcrumbs separator="|" aria-label="breadcrumb" sx={{color: "#673de6"}}>
+            <Link
+              underline="hover"
+              color="inherit"
+              href="/"
+              sx={{ opacity: 0.4, fontWeight: 500, color: "black" }}
+            >
+              Home
+            </Link>
+            <Typography color="text.primary" sx={{ fontWeight: "bold", color: "#673de6" }}>
+              About Us
+            </Typography>
+          </Breadcrumbs>
+        </Container>
+        <div className="flex-grow-1 mt-2">
+          {/* Main Content */}
           <Box
             sx={{
               width: "100%",
@@ -20,15 +111,10 @@ function AboutUs() {
             }}
           >
             <Stack
-              direction={{ xs: "column", md: "row" }} // Stack items vertically on xs and horizontally on md and larger
+              direction={{ xs: "column", md: "row" }}
               spacing={4}
-              sx={{
-                width: "100%",
-                maxWidth: "1200px", // Max width for large screens
-                boxSizing: "border-box",
-              }}
+              sx={{ width: "100%", maxWidth: "1200px" }}
             >
-              {/* Left Column with Image */}
               <Box
                 sx={{
                   flex: 1,
@@ -39,7 +125,7 @@ function AboutUs() {
                 }}
               >
                 <img
-                  src="https://via.placeholder.com/400" // Replace with your image URL
+                  src="/assets/local/manLaptop.png"
                   alt="About Us"
                   style={{
                     width: "100%",
@@ -49,58 +135,78 @@ function AboutUs() {
                   }}
                 />
               </Box>
-
-              {/* Right Column with Text */}
               <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                {/* About Us Title */}
                 <Typography
-                  variant="h4"
+                  variant="body1"
                   sx={{
-                    fontWeight: "bold",
-                    color: (theme) => theme.palette.primary.main,
-                    marginBottom: 2,
-                    fontSize: { xs: "1.8rem", sm: "2.5rem" },
+                    fontSize: { xs: "16px", sm: "18px", md: "20px" },
+                    fontWeight: "600",
+                    color: "#673de6",
                   }}
                 >
                   About Us
                 </Typography>
-
-                {/* Section Title */}
                 <Typography
-                  variant="h5"
+                  variant="h1"
                   sx={{
-                    fontWeight: "bold",
-                    color: (theme) => theme.palette.primary.main,
-                    marginBottom: 3,
-                    fontSize: { xs: "1.2rem", sm: "1.5rem" },
+                    fontSize: { xs: "24px", sm: "32px", md: "50px" },
+                    fontWeight: "1000",
+                    marginBottom: 2,
                   }}
                 >
                   Who We Are
                 </Typography>
-
-                {/* About Us Description */}
                 <Typography
                   variant="body1"
                   sx={{
                     color: "text.primary",
                     textAlign: "justify",
                     fontSize: { xs: "1rem", sm: "1.2rem" },
-                    lineHeight: 1.6,
+                    lineHeight: 1.2,
                     marginBottom: 2,
                   }}
                 >
-                  BidNest is an innovative e-Tender Management System designed to streamline the bidding and procurement process for businesses and government entities. Our platform connects vendors with large-scale tender opportunities, ensuring transparency, efficiency, and seamless communication.
+                  BidNest is an innovative e-Tender Management System designed
+                  to streamline the bidding and procurement process for
+                  businesses and government entities. Our platform connects
+                  vendors with large-scale tender opportunities, ensuring
+                  transparency, efficiency, and seamless communication.
                 </Typography>
-
-                {/* Call to Action Button */}
                 <Button
+                  className="buttonDesign"
                   variant="contained"
-                  color="primary"
-                  sx={{ alignSelf: "flex-start", borderRadius: 3, padding: "8px 20px" }}
+                  sx={{
+                    fontSize: { xs: "16px", sm: "18px", md: "17px" },
+                    alignSelf: "flex-start",
+                    borderRadius: 3,
+                    padding: "8px 20px",
+                  }}
                 >
                   Learn More
                 </Button>
               </Box>
+            </Stack>
+          </Box>
+        </div>
+        {/* Dynamic Cards Section */}
+        <div className="flex-grow-1 mt-4">
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: { xs: 3, sm: 4 },
+            }}
+          >
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              spacing={4}
+              sx={{ width: "100%", maxWidth: "1200px" }}
+            >
+              {cardData.map((card, index) => (
+                <CardItem key={index} {...card} />
+              ))}
             </Stack>
           </Box>
         </div>
