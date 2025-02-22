@@ -23,7 +23,7 @@ const ResponsiveCard = () => {
       sx={{
         flexGrow: 1,
         padding: { xs: 2, sm: 4, md: 6 },
-        maxWidth: "1200px",
+        // maxWidth: "1200px",
         margin: "auto",
       }}
     >

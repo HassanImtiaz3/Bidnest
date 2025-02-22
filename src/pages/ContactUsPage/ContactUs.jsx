@@ -3,6 +3,7 @@ import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
 import { sendEmail } from "../../services/Contact";
 import { useState } from "react";
+import Bread from "../../widgets/BackToHomeButton/BreadCrumbs.jsx";
 
 import {
   Box,
@@ -42,8 +43,11 @@ function ContactUs() {
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
+        <Bread name="Contact Us" />;
+
+      
         <div className="flex-grow-1">
-          {/* Wrapper Box to center the content */}
+       
           <Box
             sx={{
               width: "100%",

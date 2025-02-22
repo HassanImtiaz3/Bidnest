@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
+import Bread from "../../widgets/BackToHomeButton/BreadCrumbs.jsx";
+
 import {
   Box,
   Typography,
@@ -79,6 +81,8 @@ const ParticipatingAgenciesSection = () => {
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
+        <Bread name="Participant Agencies" />;
+
         <div className="flex-grow-1 mt-4">
           <div className="container text-center mt-5 mb-4">
             <Box sx={{ py: 5, px: 3, backgroundColor: "#f9f9f9" }}>
@@ -151,7 +155,7 @@ const ParticipatingAgenciesSection = () => {
               {filteredAgencies.length > agenciesPerPage && (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                   <Button
-                  className='buttonDesign'
+                    className="buttonDesign"
                     variant="contained"
                     onClick={() => setCurrentPage((prev) => prev - 1)}
                     disabled={currentPage === 1}
@@ -166,7 +170,7 @@ const ParticipatingAgenciesSection = () => {
                     Page {currentPage} of {totalPages}
                   </Typography>
                   <Button
-                  className='buttonDesign'
+                    className="buttonDesign"
                     variant="contained"
                     onClick={() => setCurrentPage((prev) => prev + 1)}
                     disabled={currentPage === totalPages}

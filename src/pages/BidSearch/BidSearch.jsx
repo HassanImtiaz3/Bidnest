@@ -14,6 +14,7 @@ import {
   Divider,
   Button,
 } from "@mui/material";
+import Bread from "../../widgets/BackToHomeButton/BreadCrumbs.jsx";
 
 function OpenSolicitations() {
 
@@ -101,14 +102,12 @@ function OpenSolicitations() {
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
-        <div className="flex-grow-1 mt-4">
+        <Bread name="Bid Search" />;
+       
+        <div className="flex-grow-1">
           <div className="container text-center mt-5 mb-4">
             <Box sx={{ p: 2, backgroundColor: "#f9f9f9" }}>
-              {/* Breadcrumb */}
-              <Typography variant="body2" sx={{ mb: 2 }}>
-                <a href="/">Home</a> / Bid Search
-              </Typography>
-
+          
               {/* Title */}
               <Typography variant="h4" sx={{ mb: 3 }}>
                 Open Solicitations

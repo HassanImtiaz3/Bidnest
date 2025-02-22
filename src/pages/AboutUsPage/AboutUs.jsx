@@ -1,6 +1,7 @@
 import React from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
+import Bread from "../../widgets/BackToHomeButton/BreadCrumbs.jsx";
 import {
   Box,
   Stack,
@@ -9,9 +10,7 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Breadcrumbs,
-  Link,
-  Container,
+
 } from "@mui/material";
 
 const cardData = [
@@ -84,21 +83,7 @@ function AboutUs() {
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
-        <Container sx={{ my: 2 }}>
-          <Breadcrumbs separator="|" aria-label="breadcrumb" sx={{color: "#673de6"}}>
-            <Link
-              underline="hover"
-              color="inherit"
-              href="/"
-              sx={{ opacity: 0.4, fontWeight: 500, color: "black" }}
-            >
-              Home
-            </Link>
-            <Typography color="text.primary" sx={{ fontWeight: "bold", color: "#673de6" }}>
-              About Us
-            </Typography>
-          </Breadcrumbs>
-        </Container>
+        <Bread name="About Us" />;
         <div className="flex-grow-1 mt-2">
           {/* Main Content */}
           <Box

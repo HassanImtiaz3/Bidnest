@@ -1,60 +1,19 @@
 import React from "react";
 import Footer from "../../components/Footer/Footer";
 import Navbar from "../../components/Navbar/Navbar";
-import { Box } from "@mui/material";
 import c1 from "../../assets/c1.jpg";
 import c2 from "../../assets/c2.jpg";
 import c3 from "../../assets/c3.webp";
 import Hero from "../../widgets/Hero/Hero";
-import why from "../../assets/why.webp";
+import Bread from "../../widgets/BackToHomeButton/BreadCrumbs"
 
 function WhyBidnest() {
   return (
     <>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
-       
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            backgroundImage: `url(${why})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            maxHeight: "650px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingBottom: "12%",
-            paddingTop: "12%",
-          }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Dark overlay
-              zIndex: 1,
-            }}
-          ></Box>
-
-          <Box
-            sx={{
-              position: "relative",
-              zIndex: 2,
-              textAlign: "center",
-              color: "white",
-            }}
-          >
-           
-          </Box>
-        </Box>
-
+        <Bread name="Why Bidnest"/>
+    
         <Hero
           image={c1}
           heading="Centralized Tendering Platform"
