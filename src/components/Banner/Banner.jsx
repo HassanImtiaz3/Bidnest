@@ -11,7 +11,6 @@ import bannerImage from "../../assets/banner.jpg";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function App() {
-  
   return (
     <header>
       <Box
@@ -70,49 +69,6 @@ export default function App() {
                   }}
                 />
               </Stack>
-            </Box>
-
-            {/* Popular Searches */}
-            <Box  mt={2} textAlign={{ xs: "center", md: "left"}}>
-              <Box
-                       sx={{
-                         display: "inline-block",
-                         backgroundColor: "#673de6",
-                         color: "white",
-                         padding: "3px 20px",
-                         borderRadius: "3px",
-                         marginRight: 1
-                       }}
-                     >
-                       <Typography
-                         variant="body1"
-                         sx={{
-                           fontSize: { xs: "16px", sm: "18px", md: "18px" },
-                           fontWeight: "500",
-                         }}
-                       >
-                         BID NOW
-                       </Typography>
-                     </Box>
-               <Box
-                        sx={{
-                          display: "inline-block",
-                          backgroundColor: "#673de6",
-                          color: "white",
-                          padding: "3px 20px",
-                          borderRadius: "3px",
-                        }}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            fontSize: { xs: "16px", sm: "18px", md: "18px" },
-                            fontWeight: "500",
-                          }}
-                        >
-                          POST NOW
-                        </Typography>
-                      </Box>
             </Box>
           </Box>
         </Container>

@@ -18,16 +18,7 @@ const EnrollmentSection = () => {
           padding: { xs: 3, md: 5 },
         }}
       >
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: { xs: "24px", sm: "32px", md: "55px" },
-            fontWeight: "1000",
-            marginBottom: 2, // Added spacing below heading
-          }}
-        >
-          ENROLLMENT OF
-        </Typography>
+        
         <Box
           sx={{
             display: "inline-block",
@@ -64,18 +55,7 @@ const EnrollmentSection = () => {
           padding: { xs: 3, md: 5 },
         }}
       >
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: { xs: "24px", sm: "32px", md: "55px" },
-            fontWeight: "1000",
-            color: "#673de6",
-            marginBottom: 2, // Added spacing below heading
-
-          }}
-        >
-          REGISTRATION OF
-        </Typography>
+        
         <Box
           sx={{
             display: "inline-block",
