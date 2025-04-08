@@ -106,7 +106,7 @@ export default function App() {
                 className="text-uppercase fw-bold mb-4"
                 style={{ color: themeColor }}
               >
-                Products
+                Projects
               </h6>
               <p>
                 <a
@@ -115,7 +115,7 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  Angular
+                  Open Bids
                 </a>
               </p>
               <p>
@@ -125,7 +125,7 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  React
+                  Close Bids
                 </a>
               </p>
               <p>
@@ -135,7 +135,7 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  Vue
+                  Purchasing Groups
                 </a>
               </p>
               <p>
@@ -145,7 +145,47 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  Laravel
+                  Participating Agencies
+                </a>
+              </p>
+              <p>
+                <a
+                  href="#!"
+                  style={{ color: themeColor }}
+                  onMouseEnter={(e) => (e.target.style.color = hoverColor)}
+                  onMouseLeave={(e) => (e.target.style.color = themeColor)}
+                >
+                  Company
+                </a>
+              </p>
+              <p>
+                <a
+                  href="#!"
+                  style={{ color: themeColor }}
+                  onMouseEnter={(e) => (e.target.style.color = hoverColor)}
+                  onMouseLeave={(e) => (e.target.style.color = themeColor)}
+                >
+                  Buyer Solutions
+                </a>
+              </p>
+              <p>
+                <a
+                  href="#!"
+                  style={{ color: themeColor }}
+                  onMouseEnter={(e) => (e.target.style.color = hoverColor)}
+                  onMouseLeave={(e) => (e.target.style.color = themeColor)}
+                >
+                  Buyer Demo Request
+                </a>
+              </p>
+              <p>
+                <a
+                  href="#!"
+                  style={{ color: themeColor }}
+                  onMouseEnter={(e) => (e.target.style.color = hoverColor)}
+                  onMouseLeave={(e) => (e.target.style.color = themeColor)}
+                >
+                  Catergories
                 </a>
               </p>
             </MDBCol>
@@ -164,7 +204,7 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  Pricing
+                  Facebook
                 </a>
               </p>
               <p>
@@ -174,7 +214,7 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  Settings
+                  Linkedin
                 </a>
               </p>
               <p>
@@ -184,7 +224,7 @@ export default function App() {
                   onMouseEnter={(e) => (e.target.style.color = hoverColor)}
                   onMouseLeave={(e) => (e.target.style.color = themeColor)}
                 >
-                  Orders
+                  Twitter
                 </a>
               </p>
               <p>
@@ -208,14 +248,14 @@ export default function App() {
               </h6>
               <p style={{ color: themeColor }}>
                 <MDBIcon icon="home" className="me-2" />
-                Lahore, Pakistan
+                173 E block Lahore, Pakistan
               </p>
               <p style={{ color: themeColor }}>
                 <MDBIcon icon="envelope" className="me-3" />
-                info@example.com
+                support@bidnest.com
               </p>
               <p style={{ color: themeColor }}>
-                <MDBIcon icon="phone" className="me-3" /> +92 304 8899129
+                <MDBIcon icon="phone" className="me-3" />+92 3324421885
               </p>
             </MDBCol>
           </MDBRow>

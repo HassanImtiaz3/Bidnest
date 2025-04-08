@@ -147,7 +147,7 @@ function ContactUs() {
                         variant="body2"
                         sx={{ marginTop: 0.5, color: "grey" }}
                       >
-                        [Your Company Address Here]
+                        173 E block Lahore, Pakistan
                       </Typography>
                     </Box>
                   </Stack>
@@ -176,7 +176,7 @@ function ContactUs() {
                         variant="body2"
                         sx={{ marginTop: 0.5, color: "grey" }}
                       >
-                        [Your Contact Number]
+                        +92 3324421885
                       </Typography>
                     </Box>
                   </Stack>
@@ -205,7 +205,7 @@ function ContactUs() {
                         variant="body2"
                         sx={{ marginTop: 0.5, color: "grey" }}
                       >
-                        support@bidnest.com
+                        bidnest2@gmail.com
                       </Typography>
                     </Box>
                   </Stack>
