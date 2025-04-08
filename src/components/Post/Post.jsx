@@ -1,35 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 const Post = () => {
   const primaryColor = '#673de6';
-  const secondaryColor = '#00c9a7';
-  const backgroundColor = '#f9f9f9';
-  const textPrimaryColor = '#000000';
   const textSecondaryColor = '#ffffff';
   const hoverColor = '#9896F0';
-
-  // Responsive column control
-  const [columns, setColumns] = useState(3);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 600) setColumns(1);
-      else if (window.innerWidth <= 900) setColumns(2);
-      else setColumns(3);
-    };
-
-    handleResize(); // on mount
-    window.addEventListener('resize', handleResize); // on resize
-    return () => window.removeEventListener('resize', handleResize); // cleanup
-  }, []);
 
   const posts = [
     {
       title: 'Brand New iPhone 13 - 128GB',
       price: 'PKR 180,000',
       location: 'Lahore, Pakistan',
-      description:
-        'Brand new iPhone 13, 128GB, in excellent condition. Used for a month only.',
+      description: 'Brand new iPhone 13, 128GB, in excellent condition. Used for a month only.',
       imageUrl: 'https://via.placeholder.com/400x300.png?text=Product+1',
     },
     {
@@ -70,120 +51,119 @@ const Post = () => {
   ];
 
   return (
-    <div
-      style={{
-        padding: '20px',
-        backgroundColor: backgroundColor,
-        fontFamily: 'Arial, sans-serif',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        width: '100%',
-        boxSizing: 'border-box',
-      }}
-    >
-      <h1
-        style={{
-          color: primaryColor,
-          textAlign: 'center',
-          marginBottom: '30px',
-          fontSize: '2em',
-          fontWeight: 'bold',
-        }}
-      >
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', background: 'linear-gradient(135deg, #f0f0f0, #e1e1e1)' }}>
+      {/* Responsive Grid Styles */}
+      <style>{`
+        .post-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 30px;
+          justify-items: center;
+        }
+
+        /* Tablet view (600px - 1023px) */
+        @media (min-width: 600px) {
+          .post-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        /* Desktop view (1024px and up) */
+        @media (min-width: 1024px) {
+          .post-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        .post-card {
+          background-color: #fff;
+          border-radius: 15px;
+          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          max-width: 400px;
+          margin: 0 auto;
+          border: 1px solid #e0e0e0;
+          overflow: hidden;
+        }
+
+        .post-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-image {
+          width: 100%;
+          height: 220px;
+          object-fit: cover;
+          border-radius: 12px;
+          margin-bottom: 15px;
+        }
+
+        .post-title {
+          font-size: 1.5em;
+          font-weight: bold;
+          color: #333;
+          margin-bottom: 12px;
+          font-family: 'Roboto', sans-serif;
+        }
+
+        .post-price {
+          font-size: 1.3em;
+          color: ${primaryColor};
+          margin-bottom: 10px;
+        }
+
+        .post-location {
+          font-style: italic;
+          color: #777;
+          margin-bottom: 15px;
+        }
+
+        .post-description {
+          color: #555;
+          line-height: 1.6;
+          font-size: 1.1em;
+          margin-bottom: 20px;
+          font-family: 'Arial', sans-serif;
+        }
+
+        .contact-btn {
+          background-color: ${primaryColor};
+          color: ${textSecondaryColor};
+          padding: 14px;
+          border: none;
+          border-radius: 25px;
+          font-size: 1.2em;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.3s ease;
+          width: 100%;
+          margin-top: auto;
+        }
+
+        .contact-btn:hover {
+          background-color: ${hoverColor};
+          transform: scale(1.05);
+        }
+      `}</style>
+
+      <h1 style={{ color: primaryColor, marginBottom: '30px', fontSize: '2.5em', textAlign: 'center', fontFamily: 'Roboto', fontWeight: 'bold' }}>
         Your Posts
       </h1>
 
-      {/* Responsive Grid */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${columns}, 1fr)`,
-          gap: '20px',
-          width: '100%',
-          maxWidth: '1200px',
-          marginBottom: '40px',
-        }}
-      >
+      <div className="post-grid">
         {posts.map((post, index) => (
-          <div
-            key={index}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-              padding: '20px',
-              transition: 'transform 0.3s ease',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-          >
-            <div style={{ textAlign: 'center' }}>
-              <img
-                src={post.imageUrl}
-                alt={post.title}
-                style={{
-                  width: '100%',
-                  maxHeight: '200px',
-                  objectFit: 'cover',
-                  borderRadius: '8px',
-                }}
-              />
-            </div>
-            <h2 style={{ fontSize: '1.4em', fontWeight: 'bold', color: textPrimaryColor }}>
-              {post.title}
-            </h2>
-            <p style={{ fontSize: '1.2em', color: primaryColor }}>{post.price}</p>
-            <p style={{ color: '#777', fontStyle: 'italic', fontSize: '1em' }}>{post.location}</p>
-            <p style={{ fontSize: '1em', color: '#555', lineHeight: '1.6' }}>{post.description}</p>
-
-            <div style={{ textAlign: 'center' }}>
-              <button
-                style={{
-                  backgroundColor: primaryColor,
-                  color: textSecondaryColor,
-                  padding: '12px 20px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  fontSize: '1.1em',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.3s ease',
-                }}
-                onMouseEnter={(e) => (e.target.style.backgroundColor = hoverColor)}
-                onMouseLeave={(e) => (e.target.style.backgroundColor = primaryColor)}
-              >
-                Contact Seller
-              </button>
-            </div>
+          <div key={index} className="post-card">
+            <img src={post.imageUrl} alt={post.title} className="post-image" />
+            <h2 className="post-title">{post.title}</h2>
+            <p className="post-price">{post.price}</p>
+            <p className="post-location">{post.location}</p>
+            <p className="post-description">{post.description}</p>
+            <button className="contact-btn">Contact Seller</button>
           </div>
         ))}
-      </div>
-
-      {/* Footer */}
-      <div
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.05)',
-          color: primaryColor,
-          textAlign: 'center',
-          padding: '20px',
-          fontSize: '1em',
-          marginTop: '40px',
-        }}
-      >
-        © 2025 Copyright:{' '}
-        <a
-          href="https://hoomanproduction.com"
-          style={{
-            color: primaryColor,
-            fontWeight: 'bold',
-            textDecoration: 'none',
-          }}
-          onMouseEnter={(e) => (e.target.style.color = hoverColor)}
-          onMouseLeave={(e) => (e.target.style.color = primaryColor)}
-        >
-          HoomanProduction.com
-        </a>
       </div>
     </div>
   );
