@@ -11,6 +11,10 @@ import ContactUs from "./pages/ContactUsPage/index.jsx";
 import WhyBidnest from "./pages/WhyBidnestPage/Why.jsx";
 import AboutUs from "./pages/AboutUsPage/index.jsx"
 import PostNow from "./pages/PostNowPage/index.jsx";
+import Post from './components/Post/Post';
+
+
+
 
 function App() {
   return (
@@ -27,6 +31,7 @@ function App() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/why-bidnest" element={<WhyBidnest />} />
         <Route path="/post-now" element={<PostNow/>} />
+        <Route path="/Post" element={<Post />} />
       </Routes>
     </Router>
   );
