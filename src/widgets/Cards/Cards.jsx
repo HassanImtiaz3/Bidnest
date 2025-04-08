@@ -5,7 +5,7 @@ import { FaCheckCircle } from 'react-icons/fa'; // Import React Icon
 const ResponsiveCard = () => {
   const cardData = [
     {
-      title: "Hassan Loru",
+      title: "Hassan",
       description: "This is a description for card 1. It explains the content of this card.",
     },
     {
