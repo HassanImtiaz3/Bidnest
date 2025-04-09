@@ -54,100 +54,85 @@ const Post = () => {
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', background: 'linear-gradient(135deg, #f0f0f0, #e1e1e1)' }}>
       {/* Responsive Grid Styles */}
       <style>{`
-        .post-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 30px;
-          justify-items: center;
-        }
+  .post-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    justify-items: center;
+  }
 
-        /* Tablet view (600px - 1023px) */
-        @media (min-width: 600px) {
-          .post-grid {
-            grid-template-columns: 1fr;
-          }
-        }
+  .post-card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 600px;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+  }
 
-        /* Desktop view (1024px and up) */
-        @media (min-width: 1024px) {
-          .post-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
+  .post-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
 
-        .post-card {
-          background-color: #fff;
-          border-radius: 15px;
-          box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-          padding: 20px;
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          max-width: 400px;
-          margin: 0 auto;
-          border: 1px solid #e0e0e0;
-          overflow: hidden;
-        }
+  .post-image {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
 
-        .post-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
+  .post-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 12px;
+    font-family: 'Roboto', sans-serif;
+  }
 
-        .post-image {
-          width: 100%;
-          height: 220px;
-          object-fit: cover;
-          border-radius: 12px;
-          margin-bottom: 15px;
-        }
+  .post-price {
+    font-size: 1.4em;
+    color: ${primaryColor};
+    margin-bottom: 10px;
+  }
 
-        .post-title {
-          font-size: 1.5em;
-          font-weight: bold;
-          color: #333;
-          margin-bottom: 12px;
-          font-family: 'Roboto', sans-serif;
-        }
+  .post-location {
+    font-style: italic;
+    color: #777;
+    margin-bottom: 15px;
+  }
 
-        .post-price {
-          font-size: 1.3em;
-          color: ${primaryColor};
-          margin-bottom: 10px;
-        }
+  .post-description {
+    color: #555;
+    line-height: 1.6;
+    font-size: 1.1em;
+    margin-bottom: 25px;
+  }
 
-        .post-location {
-          font-style: italic;
-          color: #777;
-          margin-bottom: 15px;
-        }
+  .contact-btn {
+    background-color: ${primaryColor};
+    color: ${textSecondaryColor};
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 100%;
+  }
 
-        .post-description {
-          color: #555;
-          line-height: 1.6;
-          font-size: 1.1em;
-          margin-bottom: 20px;
-          font-family: 'Arial', sans-serif;
-        }
+  .contact-btn:hover {
+    background-color: ${hoverColor};
+    transform: scale(1.05);
+  }
+`}</style>
 
-        .contact-btn {
-          background-color: ${primaryColor};
-          color: ${textSecondaryColor};
-          padding: 14px;
-          border: none;
-          border-radius: 25px;
-          font-size: 1.2em;
-          cursor: pointer;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-          width: 100%;
-          margin-top: auto;
-        }
-
-        .contact-btn:hover {
-          background-color: ${hoverColor};
-          transform: scale(1.05);
-        }
-      `}</style>
 
       <h1 style={{ color: primaryColor, marginBottom: '30px', fontSize: '2.5em', textAlign: 'center', fontFamily: 'Roboto', fontWeight: 'bold' }}>
         Your Posts
@@ -161,7 +146,7 @@ const Post = () => {
             <p className="post-price">{post.price}</p>
             <p className="post-location">{post.location}</p>
             <p className="post-description">{post.description}</p>
-            <button className="contact-btn">Contact Seller</button>
+            <button className="contact-btn">Contact Customer</button>
           </div>
         ))}
       </div>
