@@ -24,6 +24,21 @@ const Input = styled("input")({
 function PostNow() {
   const [category, setCategory] = React.useState("");
   const [deadline, setDeadline] = React.useState("");
+  const [quantity, setQuantity] = React.useState(0);
+  const [budget, setBudget] = React.useState(0);
+  const [totalBudget, setTotalBudget] = React.useState(0);
+
+  const handleQuantityChange = (event) => {
+    const value = event.target.value;
+    setQuantity(value);
+    setTotalBudget(value * budget);
+  };
+
+  const handleBudgetChange = (event) => {
+    const value = event.target.value;
+    setBudget(value);
+    setTotalBudget(quantity * value);
+  };
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
@@ -69,8 +84,7 @@ function PostNow() {
           justifyContent: "center", // Horizontally centers any children inside the box
           borderRadius: "8px", // Optional rounded corners
         }}
-      >
-      </Box>
+      ></Box>
       <Container maxWidth="lg" sx={{ mt: -30, mb: 4, zIndex: 10 }}>
         <Box
           sx={{
@@ -114,7 +128,7 @@ function PostNow() {
                     },
                   }}
                   fullWidth
-                  label="Product Name"
+                  label="Contact Name"
                   variant="outlined"
                 />
                 <TextField
@@ -129,12 +143,10 @@ function PostNow() {
                     },
                   }}
                   fullWidth
-                  label="Quantity"
-                  type="number"
+                  label="Company Name"
                   variant="outlined"
                 />
               </Stack>
-
               {/* Row 2 */}
               <Stack
                 direction="row"
@@ -153,10 +165,35 @@ function PostNow() {
                     },
                   }}
                   fullWidth
-                  label="Budget"
-                  type="number"
+                  label="Product Name"
                   variant="outlined"
                 />
+                <TextField
+                  sx={{
+                    borderRadius: 2,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "transparent",
+                      color: "text.primary",
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "text.primary",
+                    },
+                  }}
+                  fullWidth
+                  label="Quantity"
+                  type="number"
+                  variant="outlined"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                />
+              </Stack>
+
+              {/* Row 3 */}
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{ paddingX: 15, paddingY: 1 }}
+              >
                 <FormControl
                   fullWidth
                   variant="outlined"
@@ -196,9 +233,26 @@ function PostNow() {
                     <MenuItem value="food">Food</MenuItem>
                   </Select>
                 </FormControl>
+                <TextField
+                  sx={{
+                    borderRadius: 2,
+                    "& .MuiInputBase-root": {
+                      backgroundColor: "transparent",
+                      color: "text.primary",
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "text.primary",
+                    },
+                  }}
+                  fullWidth
+                  label="Budget"
+                  type="number"
+                  variant="outlined"
+                  value={budget}
+                  onChange={handleBudgetChange}
+                />
               </Stack>
 
-              {/* Row 3 */}
               <Stack
                 direction="row"
                 spacing={2}
@@ -257,45 +311,11 @@ function PostNow() {
                     },
                   }}
                   fullWidth
-                  label="Brand Preference"
+                  label="Total Budget"
+                  type="number"
                   variant="outlined"
-                />
-                <TextField
-                  sx={{
-                    borderRadius: 2,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "transparent",
-                      color: "text.primary",
-                    },
-                    "& .MuiInputLabel-root": {
-                      color: "text.primary",
-                    },
-                  }}
-                  fullWidth
-                  label="Contact Name"
-                  variant="outlined"
-                />
-              </Stack>
-
-              <Stack
-                direction="row"
-                spacing={2}
-                sx={{ paddingX: 15, paddingY: 1 }}
-              >
-                <TextField
-                  sx={{
-                    borderRadius: 2,
-                    "& .MuiInputBase-root": {
-                      backgroundColor: "transparent",
-                      color: "text.primary",
-                    },
-                    "& .MuiInputLabel-root": {
-                      color: "text.primary",
-                    },
-                  }}
-                  fullWidth
-                  label="Contact Number"
-                  variant="outlined"
+                  value={totalBudget}
+                  InputProps={{ readOnly: true }}
                 />
               </Stack>
 
@@ -363,7 +383,8 @@ function PostNow() {
                 sx={{
                   px: 7,
                   py: 2,
-                  background: "linear-gradient(35deg, #673DE6 50%, #000000 100%)", // Diagonal gradient
+                  background:
+                    "linear-gradient(35deg, #673DE6 50%, #000000 100%)", // Diagonal gradient
                   color: "white",
                   borderRadius: "8px", // Rounded corners
                   textTransform: "none", // Removes uppercase transformation

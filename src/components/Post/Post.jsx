@@ -1,4 +1,5 @@
 import React from 'react';
+import bannerImage from "../../assets/banner.jpg";
 
 const Post = () => {
   const primaryColor = '#673de6';
@@ -11,14 +12,14 @@ const Post = () => {
       price: 'PKR 180,000',
       location: 'Lahore, Pakistan',
       description: 'Brand new iPhone 13, 128GB, in excellent condition. Used for a month only.',
-      imageUrl: 'https://via.placeholder.com/400x300.png?text=Product+1',
+      imageUrl: {bannerImage},
     },
     {
       title: 'Samsung Galaxy S21 - 256GB',
       price: 'PKR 150,000',
       location: 'Karachi, Pakistan',
       description: 'Used for a week. Comes with original box and charger.',
-      imageUrl: 'https://via.placeholder.com/400x300.png?text=Product+2',
+      imageUrl: 'https://propakistani.pk/price/wp-content/uploads/2021/11/Apple-iPhone-13-price-in-Pakistan-200x300.png',
     },
     {
       title: 'MacBook Pro 16" - 512GB SSD',
