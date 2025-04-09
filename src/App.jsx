@@ -9,12 +9,10 @@ import BidSearch from "./pages/BidSearch/index.jsx";
 import Participating from "./pages/ParticipantPage/index.jsx";
 import ContactUs from "./pages/ContactUsPage/index.jsx";
 import WhyBidnest from "./pages/WhyBidnestPage/Why.jsx";
-import AboutUs from "./pages/AboutUsPage/index.jsx"
+import AboutUs from "./pages/AboutUsPage/index.jsx";
 import PostNow from "./pages/PostNowPage/index.jsx";
-import Post from './components/Post/Post';
-
-
-
+import Post from "./components/Post/Post";
+import ProtectedRoute from "./services/ProtectedRoute.js";
 
 function App() {
   return (
@@ -30,7 +28,14 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/why-bidnest" element={<WhyBidnest />} />
-        <Route path="/post-now" element={<PostNow/>} />
+        <Route
+          path="/post-now"
+          element={
+            <ProtectedRoute>
+              <PostNow />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/Post" element={<Post />} />
       </Routes>
     </Router>

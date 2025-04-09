@@ -157,7 +157,7 @@ function App() {
                 <Typography variant="body2" textAlign="center">
                   Don't have an account?{" "}
                   <a
-                    href="/registration"
+                    href="/user"
                     style={{ color: "#673de6", textDecoration: "none" }}
                   >
                     Register here

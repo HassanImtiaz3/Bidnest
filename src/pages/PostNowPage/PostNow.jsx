@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   TextField,
@@ -15,27 +15,35 @@ import {
 } from "@mui/material";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import { useState } from "react";
+import { submitPost } from "../../services/Post";
 
 const Input = styled("input")({
   display: "none",
 });
 
 function PostNow() {
-  const [category, setCategory] = React.useState("");
-  const [deadline, setDeadline] = React.useState("");
-  const [quantity, setQuantity] = React.useState(0);
-  const [budget, setBudget] = React.useState(0);
-  const [totalBudget, setTotalBudget] = React.useState(0);
+  const [contactName, setContactName] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [productName, setProductName] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const [category, setCategory] = useState("");
+  const [budget, setBudget] = useState(0);
+  const [deadline, setDeadline] = useState("");
+  const [deliveryLocation, setDeliveryLocation] = useState("");
+  const [totalBudget, setTotalBudget] = useState(0);
+  const [message, setMessage] = useState("");
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleQuantityChange = (event) => {
-    const value = event.target.value;
+    const value = Number(event.target.value);
     setQuantity(value);
     setTotalBudget(value * budget);
   };
 
   const handleBudgetChange = (event) => {
-    const value = event.target.value;
+    const value = Number(event.target.value);
     setBudget(value);
     setTotalBudget(quantity * value);
   };
@@ -48,25 +56,86 @@ function PostNow() {
     setDeadline(event.target.value);
   };
 
-  const [fileName, setFileName] = useState("");
-
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
     }
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault(); // Prevent default behavior (Prevent file from being opened)
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      setFileName(file.name);
-      // Perform file upload task here if required
+    const selectedFile = event.dataTransfer.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(',')[1]); // Extract only the base64 part
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      let fileBase64 = "";
+      if (file) {
+        fileBase64 = await convertToBase64(file);
+      }
+
+      const postData = {
+        contactName,
+        companyName,
+        productName,
+        quantity,
+        category,
+        budget,
+        deadline,
+        deliveryLocation,
+        totalBudget,
+        message,
+        file: fileBase64,
+        fileName: file ? file.name : "",
+        fileType: file ? file.type : ""
+      };
+
+      const result = await submitPost(postData);
+      if (result.success) {
+        alert("Post created successfully!");
+        // Reset form
+        setContactName("");
+        setCompanyName("");
+        setProductName("");
+        setQuantity(0);
+        setCategory("");
+        setBudget(0);
+        setDeadline("");
+        setDeliveryLocation("");
+        setTotalBudget(0);
+        setMessage("");
+        setFile(null);
+        setFileName("");
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Failed to submit post. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -75,14 +144,14 @@ function PostNow() {
       <Navbar />
       <Box
         sx={{
-          background: "linear-gradient(145deg, #673DE6 0%, #000000 100%)", // Diagonal gradient
+          background: "linear-gradient(145deg, #673DE6 0%, #000000 100%)",
           maxHeight: "650px",
           paddingY: { xs: "20%", sm: "12%" },
-          color: "#FFFFFF", // Ensures text color is white for better contrast
+          color: "#FFFFFF",
           display: "flex",
-          alignItems: "center", // Vertically centers any children inside the box
-          justifyContent: "center", // Horizontally centers any children inside the box
-          borderRadius: "8px", // Optional rounded corners
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "8px",
         }}
       ></Box>
       <Container maxWidth="lg" sx={{ mt: -30, mb: 4, zIndex: 10 }}>
@@ -108,7 +177,7 @@ function PostNow() {
             REQUEST FOR
             <span style={{ color: "#673de6" }}> QUOTE</span>
           </Typography>
-          <form>
+          <form onSubmit={handleSubmit}>
             <Stack direction="column" spacing={2}>
               {/* Row 1 */}
               <Stack
@@ -130,6 +199,9 @@ function PostNow() {
                   fullWidth
                   label="Contact Name"
                   variant="outlined"
+                  value={contactName}
+                  onChange={(e) => setContactName(e.target.value)}
+                  required
                 />
                 <TextField
                   sx={{
@@ -145,6 +217,9 @@ function PostNow() {
                   fullWidth
                   label="Company Name"
                   variant="outlined"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  required
                 />
               </Stack>
               {/* Row 2 */}
@@ -167,6 +242,9 @@ function PostNow() {
                   fullWidth
                   label="Product Name"
                   variant="outlined"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  required
                 />
                 <TextField
                   sx={{
@@ -185,6 +263,8 @@ function PostNow() {
                   variant="outlined"
                   value={quantity}
                   onChange={handleQuantityChange}
+                  required
+                  inputProps={{ min: 1 }}
                 />
               </Stack>
 
@@ -196,7 +276,6 @@ function PostNow() {
               >
                 <FormControl
                   fullWidth
-                  variant="outlined"
                   sx={{
                     borderRadius: 2,
                     "& .MuiInputBase-root": {
@@ -208,24 +287,12 @@ function PostNow() {
                     },
                   }}
                 >
-                  <InputLabel
-                    sx={{
-                      borderRadius: 2,
-                      "& .MuiInputBase-root": {
-                        backgroundColor: "transparent",
-                        color: "text.primary",
-                      },
-                      "& .MuiInputLabel-root": {
-                        color: "text.primary",
-                      },
-                    }}
-                  >
-                    Category
-                  </InputLabel>
+                  <InputLabel>Category</InputLabel>
                   <Select
                     value={category}
                     label="Category"
                     onChange={handleCategoryChange}
+                    required
                   >
                     <MenuItem value="electronics">Electronics</MenuItem>
                     <MenuItem value="furniture">Furniture</MenuItem>
@@ -250,6 +317,8 @@ function PostNow() {
                   variant="outlined"
                   value={budget}
                   onChange={handleBudgetChange}
+                  required
+                  inputProps={{ min: 0, step: "0.01" }}
                 />
               </Stack>
 
@@ -275,7 +344,8 @@ function PostNow() {
                   InputLabelProps={{ shrink: true }}
                   variant="outlined"
                   value={deadline}
-                  onChange={handleDateChange}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  required
                 />
                 <TextField
                   sx={{
@@ -291,6 +361,9 @@ function PostNow() {
                   fullWidth
                   label="Delivery Location"
                   variant="outlined"
+                  value={deliveryLocation}
+                  onChange={(e) => setDeliveryLocation(e.target.value)}
+                  required
                 />
               </Stack>
 
@@ -331,7 +404,7 @@ function PostNow() {
                     padding: 2,
                     bgcolor: "#fafafa",
                     color: "#ccc",
-                    width: "100%", // Ensures the Box takes full width
+                    width: "100%",
                     "&:hover": {
                       bgcolor: "#f4f4f4",
                       color: "#666",
@@ -343,11 +416,11 @@ function PostNow() {
                   {fileName ? (
                     <Typography>{fileName}</Typography>
                   ) : (
-                    <Typography></Typography>
+                    <Typography>No file selected</Typography>
                   )}
                   <Button component="label" fullWidth>
                     Upload File
-                    <MuiInput type="file" hidden onChange={handleFileChange} />
+                    <Input type="file" onChange={handleFileChange} />
                   </Button>
                 </Box>
               </Stack>
@@ -373,6 +446,8 @@ function PostNow() {
                   multiline
                   rows={4}
                   variant="outlined"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                 />
               </Stack>
             </Stack>
@@ -380,22 +455,24 @@ function PostNow() {
               <Button
                 type="submit"
                 variant="contained"
+                disabled={isSubmitting}
                 sx={{
                   px: 7,
                   py: 2,
-                  background:
-                    "linear-gradient(35deg, #673DE6 50%, #000000 100%)", // Diagonal gradient
+                  background: "linear-gradient(35deg, #673DE6 50%, #000000 100%)",
                   color: "white",
-                  borderRadius: "8px", // Rounded corners
-                  textTransform: "none", // Removes uppercase transformation
-                  fontSize: "26px", // Sets the font size
+                  borderRadius: "8px",
+                  textTransform: "none",
+                  fontSize: "26px",
                   "&:hover": {
-                    backgroundColor:
-                      "linear-gradient(90deg, #512DA8 30%, #673DE6 90%)", // Hover effect with gradient flip
+                    background: "linear-gradient(90deg, #512DA8 30%, #673DE6 90%)",
+                  },
+                  "&:disabled": {
+                    background: "#cccccc",
                   },
                 }}
               >
-                Post Now
+                {isSubmitting ? "Posting..." : "Post Now"}
               </Button>
             </Box>
           </form>
