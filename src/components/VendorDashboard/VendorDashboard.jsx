@@ -16,12 +16,10 @@ import {
   DialogActions,
   Grid,
   TextField,
-  Divider,
-  Snackbar,
-  Alert,
 } from '@mui/material';
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
+import './VendorDashboard.css';
 
 const VendorDashboard = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -30,7 +28,6 @@ const VendorDashboard = () => {
   const [companyName, setCompanyName] = useState('');
   const [companyNameError, setCompanyNameError] = useState(false);
 
-  // Static dummy data
   const formData = {
     companyName: 'Tech Solutions Ltd.',
     requiredProduct: 'Laptop',
@@ -41,9 +38,7 @@ const VendorDashboard = () => {
     totalPrice: '35000',
   };
 
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-  };
+  const handleOpenDialog = () => setOpenDialog(true);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -76,7 +71,6 @@ const VendorDashboard = () => {
       return;
     }
 
-    // Submit logic here
     console.log('Sending proposal with file:', uploadedFile);
     handleCloseDialog();
   };
@@ -84,27 +78,27 @@ const VendorDashboard = () => {
   return (
     <>
       <Navbar />
-      <Container maxWidth="md" sx={{ my: 5 }}>
-        <Typography variant="h4" gutterBottom fontWeight="bold" textAlign="center" sx={{ color: '#6a1b9a' }}>
+      <Container maxWidth="md" className="vendor-dashboard-container">
+        <Typography variant="h4" className="vendor-dashboard-title">
           Vendor Dashboard
         </Typography>
 
-        <TableContainer component={Paper} sx={{ mb: 4, boxShadow: 3, borderRadius: 2 }}>
+        <TableContainer component={Paper} className="proposal-table-container">
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="center" colSpan={2} sx={{ backgroundColor: '#6a1b9a', color: '#fff', fontWeight: 'bold', fontSize: '1.2rem', borderBottom: '2px solid #4a148c' }}>
+                <TableCell align="center" colSpan={2} className="proposal-table-head">
                   Proposal Information
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {Object.entries(formData).map(([key, value]) => (
-                <TableRow key={key} sx={{ '&:nth-of-type(even)': { backgroundColor: '#f9f9f9' }, '&:hover': { backgroundColor: '#f1f1f1', transition: 'all 0.3s ease' } }}>
-                  <TableCell sx={{ fontWeight: 'bold', color: '#333' }}>
+                <TableRow key={key} className="proposal-row">
+                  <TableCell className="table-label-cell">
                     {key.replace(/([A-Z])/g, ' $1').toUpperCase()}
                   </TableCell>
-                  <TableCell sx={{ color: '#444' }}>{value}</TableCell>
+                  <TableCell className="table-value-cell">{value}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -115,19 +109,8 @@ const VendorDashboard = () => {
           <Grid item>
             <Button
               variant="contained"
-              color="primary"
               onClick={handleOpenDialog}
-              sx={{
-                padding: '12px 24px',
-                fontSize: '1.1rem',
-                background: 'linear-gradient(to right, #8e24aa, #6a1b9a)',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                borderRadius: 3,
-                '&:hover': {
-                  background: 'linear-gradient(to right, #6a1b9a, #8e24aa)',
-                  boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)',
-                },
-              }}
+              className="send-proposal-button"
             >
               Send Proposal
             </Button>
@@ -136,29 +119,29 @@ const VendorDashboard = () => {
       </Container>
 
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ backgroundColor: '#6a1b9a', color: '#fff' }}>Upload Proposal File</DialogTitle>
+        <DialogTitle className="dialog-title">Upload Proposal File</DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-            {/* Company Name Field */}
             <Grid item xs={12}>
-
               <TextField
                 variant="outlined"
-                placeholder='Company Name'
+                placeholder="Company Name"
                 fullWidth
                 value={companyName}
                 onChange={handleCompanyNameChange}
                 error={companyNameError}
-                InputLabelProps={{
-                  shrink: true, // Ensures the label stays at the top, static
-                }}
+                InputLabelProps={{ shrink: true }}
                 sx={{ marginBottom: '16px', marginTop: '8px' }}
               />
             </Grid>
 
-            {/* File Upload */}
             <Grid item xs={12}>
-              <input type="file" accept="application/pdf" onChange={handleFileChange} style={{ width: '100%', padding: '8px', borderRadius: 4 }} />
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileChange}
+                className="file-input"
+              />
               {fileError && (
                 <Typography color="error" mt={1}>
                   Please upload a PDF file before sending.
@@ -168,24 +151,19 @@ const VendorDashboard = () => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} sx={{ color: '#6a1b9a' }}>Cancel</Button>
+          <Button onClick={handleCloseDialog} className="cancel-button">
+            Cancel
+          </Button>
           <Button
             variant="contained"
-            color="primary"
             onClick={handleSendProposal}
             disabled={!companyName || !uploadedFile}
-            sx={{
-              backgroundColor: '#6a1b9a',
-              '&:hover': {
-                backgroundColor: '#8e24aa',
-              },
-            }}
+            className="send-button"
           >
             Send
           </Button>
         </DialogActions>
       </Dialog>
-
       <Footer />
     </>
   );
