@@ -269,12 +269,12 @@ export default function App() {
         © 2025 Copyright:
         <a
           className="text-reset fw-bold"
-          href="https://codsoftask2.netlify.app/"
+          href="#"
           style={{ color: themeColor }}
           onMouseEnter={(e) => (e.target.style.color = hoverColor)}
           onMouseLeave={(e) => (e.target.style.color = themeColor)}
         >
-          HoomanProduction.com
+          bidnest.com
         </a>
       </div>
     </MDBFooter>
