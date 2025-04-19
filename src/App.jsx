@@ -13,6 +13,8 @@ import AboutUs from "./pages/AboutUsPage/index.jsx";
 import PostNow from "./pages/PostNowPage/index.jsx";
 import Post from "./components/Post/Post";
 import ProtectedRoute from "./services/ProtectedRoute.js";
+import VendorDashboard from './components/VendorDashboard/VendorDashboard.jsx';
+import UserDashboard from './components/UserDashboard/UserDashboard.jsx';
 
 function App() {
   return (
@@ -37,6 +39,8 @@ function App() {
           }
         />
         <Route path="/Post" element={<Post />} />
+         <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+         <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>
     </Router>
   );
