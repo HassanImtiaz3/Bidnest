@@ -15,11 +15,10 @@ const EnrollmentSection = () => {
 
   const handlePostNowClick = () => {
     const isLoggedIn = Boolean(localStorage.getItem("token"));
-    console.log("isloggedin", isLoggedIn);
     if (!isLoggedIn) {
       setOpenSnackbar(true);
     } else {
-      navigate("/post-now")
+      navigate("/post-now");
     }
   };
 
@@ -27,6 +26,17 @@ const EnrollmentSection = () => {
     setOpenSnackbar(false);
     navigate("/user/login");
   };
+
+  // Get role from localStorage
+  const userData = localStorage.getItem("user");
+  let role = "";
+  try {
+    role = userData ? JSON.parse(userData)?.role : "";
+  } catch (e) {
+    console.error("Error parsing user data:", e);
+  }
+
+  const isUser = role === "user";
 
   return (
     <>
@@ -37,83 +47,87 @@ const EnrollmentSection = () => {
         alignItems="center"
         sx={{ width: "100%", padding: { xs: 3, md: 6 } }}
       >
-        {/* BID NOW Section */}
-        <Box
-          sx={{
-            width: { xs: "100%", md: "100%" },
-            textAlign: "center",
-            padding: { xs: 3, md: 5 },
-          }}
-        >
+        {/* Show POST NOW for user role only */}
+        {isUser && (
           <Box
             sx={{
-              display: "inline-block",
-              backgroundColor: "#673de6",
-              color: "white",
-              padding: "12px 60px",
-              borderRadius: "8px",
-              cursor: "pointer",
+              width: { xs: "100%", md: "100%" },
+              textAlign: "center",
+              padding: { xs: 3, md: 5 },
             }}
           >
-            <Typography
-              variant="body1"
+            <Box
+              onClick={handlePostNowClick}
               sx={{
-                fontSize: { xs: "16px", sm: "18px", md: "20px" },
-                fontWeight: "500",
+                display: "inline-block",
+                backgroundColor: "black",
+                color: "white",
+                padding: "12px 60px",
+                borderRadius: "8px",
+                cursor: "pointer",
               }}
             >
-              BID NOW
-            </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: "16px", sm: "18px", md: "20px" },
+                  fontWeight: "500",
+                }}
+              >
+                POST NOW
+              </Typography>
+            </Box>
+            <Box mt={4}>
+              <img
+                src="/assets/local/manLaptop.png"
+                alt="Public Sector"
+                style={{ width: "100%", maxWidth: "300px", height: "auto" }}
+              />
+            </Box>
           </Box>
-          <Box mt={4}>
-            <img
-              src="/assets/local/laptop.png"
-              alt="Suppliers"
-              style={{ width: "100%", maxWidth: "300px", height: "auto" }}
-            />
-          </Box>
-        </Box>
+        )}
 
-        {/* POST NOW Section */}
-        <Box
-          sx={{
-            width: { xs: "100%", md: "100%" },
-            textAlign: "center",
-            padding: { xs: 3, md: 5 },
-          }}
-        >
+        {/* Show BID NOW for non-user roles */}
+        {!isUser && (
           <Box
-            onClick={handlePostNowClick}
             sx={{
-              display: "inline-block",
-              backgroundColor: "black",
-              color: "white",
-              padding: "12px 60px",
-              borderRadius: "8px",
-              cursor: "pointer",
+              width: { xs: "100%", md: "100%" },
+              textAlign: "center",
+              padding: { xs: 3, md: 5 },
             }}
           >
-            <Typography
-              variant="body1"
+            <Box
               sx={{
-                fontSize: { xs: "16px", sm: "18px", md: "20px" },
-                fontWeight: "500",
+                display: "inline-block",
+                backgroundColor: "#673de6",
+                color: "white",
+                padding: "12px 60px",
+                borderRadius: "8px",
+                cursor: "pointer",
               }}
             >
-              POST NOW
-            </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: "16px", sm: "18px", md: "20px" },
+                  fontWeight: "500",
+                }}
+              >
+                BID NOW
+              </Typography>
+            </Box>
+            <Box mt={4}>
+              <img
+                src="/assets/local/laptop.png"
+                alt="Suppliers"
+                style={{ width: "100%", maxWidth: "300px", height: "auto" }}
+              />
+            </Box>
           </Box>
-          <Box mt={4}>
-            <img
-              src="/assets/local/manLaptop.png"
-              alt="Public Sector"
-              style={{ width: "100%", maxWidth: "300px", height: "auto" }}
-            />
-          </Box>
-        </Box>
+        )}
       </Stack>
 
-      {/* Snackbar with Login Button */}
+      {/* Snackbar for login prompt */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={5000}
@@ -124,11 +138,13 @@ const EnrollmentSection = () => {
           severity="error"
           variant="filled"
           action={
-            <Button size="small" onClick={handleLoginClick}
-            sx={{
-              backgroundColor: "black !important",
-              color: "white !important",
-            }}
+            <Button
+              size="small"
+              onClick={handleLoginClick}
+              sx={{
+                backgroundColor: "black !important",
+                color: "white !important",
+              }}
             >
               LOGIN
             </Button>

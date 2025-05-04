@@ -38,7 +38,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/Post" element={<Post />} />
+        <Route path="/post" element={<Post />} />
          <Route path="/vendor-dashboard" element={<VendorDashboard />} />
          <Route path="/user-dashboard" element={<UserDashboard />} />
       </Routes>

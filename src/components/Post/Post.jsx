@@ -9,7 +9,13 @@ const Post = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const userData = localStorage.getItem("user");
+  let role = "";
+  try {
+    role = userData ? JSON.parse(userData)?.role : "";
+  } catch (e) {
+    console.error("Error parsing user data:", e);
+  }
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -106,8 +112,12 @@ const Post = () => {
                 <p className="post-description">
                   {post.message || "No description available"}
                 </p>
-                <button className="contact-btn">Contact Customer</button>
-                <button className="contact-btn-status">View Status</button>
+                {role !== "user" && (
+                  <>
+                    <button className="contact-btn">Contact Customer</button>
+                    <button className="contact-btn-status">View Status</button>
+                  </>
+                )}
               </div>
             ))
           ) : (
