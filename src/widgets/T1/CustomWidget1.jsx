@@ -43,19 +43,7 @@ export default function CustomWidget() {
         buyers, we give you access to the most relevant bid opportunities so you
         can focus on winning more government business.
       </Typography>
-      <Button
-      className='buttonDesign'
-        sx={{
-          fontSize: { xs: "16px", sm: "18px", md: "17px" },
-          fontWeight: "500",
-          
-        }}
-        onClick={() => {
-          navigate("/user"); 
-        }}
-      >
-        Register Now
-      </Button>
+     
     </Box>
   );
 }

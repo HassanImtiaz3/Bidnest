@@ -4,11 +4,13 @@ import "./index.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { getPost } from "../../services/Post";
+import { useNavigate } from "react-router-dom";
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // <-- Move this here
   const userData = localStorage.getItem("user");
   let role = "";
   try {
@@ -75,7 +77,6 @@ const Post = () => {
       </>
     );
   }
-
   // Render posts
   return (
     <>
@@ -112,11 +113,25 @@ const Post = () => {
                 <p className="post-description">
                   {post.message || "No description available"}
                 </p>
-                {role !== "user" && (
-                  <>
-                    <button className="contact-btn">Contact Customer</button>
-                    <button className="contact-btn-status">View Status</button>
-                  </>
+                {role === "vendor" && (
+                  <button
+                    className="contact-btn"
+                    onClick={() => {
+                      navigate("/vendor-dashboard", { state: { post } });
+                    }}
+                  >
+                    Contact Customer
+                  </button>
+                )}
+                {role === "user" && (
+                  <button
+                    className="contact-btn-status"
+                    onClick={() => {
+                      navigate("/user-dashboard");
+                    }}
+                  >
+                    View Status
+                  </button>
                 )}
               </div>
             ))

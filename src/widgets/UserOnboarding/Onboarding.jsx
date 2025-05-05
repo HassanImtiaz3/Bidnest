@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Stack,
-  Typography,
-  Snackbar,
-  Alert,
-  Button,
-} from "@mui/material";
+import { Box, Stack, Typography, Snackbar, Alert, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const EnrollmentSection = () => {
@@ -22,12 +15,23 @@ const EnrollmentSection = () => {
     }
   };
 
+  const handleBidNowClick = () => {
+    const isLoggedIn = Boolean(localStorage.getItem("token"));
+    if (!isLoggedIn) {
+      setOpenSnackbar(true);
+    } else {
+      navigate("/post");
+    }
+  };
+
   const handleLoginClick = () => {
     setOpenSnackbar(false);
     navigate("/user/login");
   };
 
   // Get role from localStorage
+  const token = localStorage.getItem("token");
+
   const userData = localStorage.getItem("user");
   let role = "";
   try {
@@ -36,7 +40,8 @@ const EnrollmentSection = () => {
     console.error("Error parsing user data:", e);
   }
 
-  const isUser = role === "user";
+  const showPostNow = !token || role === "user";
+  const showBidNow = !token || role === "vendor";
 
   return (
     <>
@@ -47,8 +52,7 @@ const EnrollmentSection = () => {
         alignItems="center"
         sx={{ width: "100%", padding: { xs: 3, md: 6 } }}
       >
-        {/* Show POST NOW for user role only */}
-        {isUser && (
+        {showPostNow && (
           <Box
             sx={{
               width: { xs: "100%", md: "100%" },
@@ -87,8 +91,7 @@ const EnrollmentSection = () => {
           </Box>
         )}
 
-        {/* Show BID NOW for non-user roles */}
-        {!isUser && (
+        {showBidNow && (
           <Box
             sx={{
               width: { xs: "100%", md: "100%" },
@@ -97,6 +100,7 @@ const EnrollmentSection = () => {
             }}
           >
             <Box
+              onClick={handleBidNowClick}
               sx={{
                 display: "inline-block",
                 backgroundColor: "#673de6",

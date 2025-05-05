@@ -20,6 +20,7 @@ import {
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 import './VendorDashboard.css';
+import { useLocation } from "react-router-dom";
 
 const VendorDashboard = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -27,16 +28,20 @@ const VendorDashboard = () => {
   const [fileError, setFileError] = useState(false);
   const [companyName, setCompanyName] = useState('');
   const [companyNameError, setCompanyNameError] = useState(false);
+  const location = useLocation();
+  const postData = location.state?.post;
+  
+  const formData = postData
+  ? {
+      companyName: postData.companyName || "Unknown Company",
+      requiredProduct: postData.productName || "N/A",
+      category: postData.category || "N/A",
+      quantity: postData.quantity || "0",
+      eachPrice: postData.budget || "N/A",
+      totalPrice: postData.totalBudget || "N/A", // Calculate if needed
+    }
+  : {};
 
-  const formData = {
-    companyName: 'Tech Solutions Ltd.',
-    requiredProduct: 'Laptop',
-    brandPreference: 'Dell',
-    category: 'Electronics',
-    quantity: '50',
-    eachPrice: '700',
-    totalPrice: '35000',
-  };
 
   const handleOpenDialog = () => setOpenDialog(true);
 
