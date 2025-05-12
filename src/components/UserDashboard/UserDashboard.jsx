@@ -51,6 +51,10 @@ const UserDashboard = () => {
     setOpenRejectDialog(true);
   };
 
+  const handlePreviewProposal = (companyName) => {
+    console.log(`Previewing proposal for ${companyName}...`);
+  };
+
   const handleCloseDialog = () => {
     setOpenRejectDialog(false);
     setOpenAcceptDialog(false);
@@ -60,14 +64,12 @@ const UserDashboard = () => {
 
   const handleConfirmReject = () => {
     console.log(`Proposal for ${companyToReject} has been rejected permanently.`);
-    setOpenRejectDialog(false);
-    setCompanyToReject('');
+    handleCloseDialog();
   };
 
   const handleConfirmAccept = () => {
     console.log(`Proposal for ${companyToAccept} has been accepted.`);
-    setOpenAcceptDialog(false);
-    setCompanyToAccept('');
+    handleCloseDialog();
   };
 
   return (
@@ -82,12 +84,8 @@ const UserDashboard = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="center" className="company-table-head">
-                  Company Name
-                </TableCell>
-                <TableCell align="center" className="company-table-head">
-                  Proposal
-                </TableCell>
+                <TableCell align="center" className="company-table-head">Company Name</TableCell>
+                <TableCell align="center" className="company-table-head">Proposal</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -124,6 +122,13 @@ const UserDashboard = () => {
                       >
                         Reject
                       </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handlePreviewProposal(company.companyName)}
+                        className="proposal-button preview-btn"
+                      >
+                        Preview
+                      </Button>
                     </Stack>
                   </TableCell>
                 </TableRow>
@@ -133,12 +138,13 @@ const UserDashboard = () => {
         </TableContainer>
       </Container>
 
+      {/* Reject Dialog */}
       <Dialog open={openRejectDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ backgroundColor: '#f44336', color: '#fff' }}>
           Confirm Proposal Rejection
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" sx={{ marginBottom: 2, marginTop: 3 }}>
+          <Typography variant="body1" sx={{ my: 3 }}>
             Are you sure you want to reject this proposal? This action is irreversible and the proposal will be permanently removed.
           </Typography>
         </DialogContent>
@@ -156,12 +162,13 @@ const UserDashboard = () => {
         </DialogActions>
       </Dialog>
 
+      {/* Accept Dialog */}
       <Dialog open={openAcceptDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ backgroundColor: '#388e3c', color: '#fff' }}>
           Confirm Proposal Acceptance
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1" sx={{ marginBottom: 2, marginTop: 3 }}>
+          <Typography variant="body1" sx={{ my: 3 }}>
             Are you sure you want to accept this proposal? This will mark the proposal as officially accepted.
           </Typography>
         </DialogContent>
