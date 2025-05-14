@@ -12,6 +12,8 @@ import { Typography } from "@mui/material";
 import ProcurementNotices from "../../widgets/Notices/Notices";
 import EnrollmentSection from "../../widgets/UserOnboarding/Onboarding";
 import { Container, Box } from "@mui/material";
+import PostABid from "../../widgets/PostABid/PostABid";
+
 
 const Home = () => {
   return (
@@ -61,10 +63,12 @@ const Home = () => {
           >
             INFO <span style={{ color: "#673de6" }}>DESK</span>
           </Typography>
+
           <ResponsiveStack>
             <IconGrid />
             <Accordion />
           </ResponsiveStack>
+          <PostABid />
         </Container>
         <Footer />
       </Box>

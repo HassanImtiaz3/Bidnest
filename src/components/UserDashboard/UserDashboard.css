@@ -71,14 +71,14 @@
 }
 
 .preview-btn {
-  background-color: #000;
-  color: #fff;
-}
-
-.preview-btn:hover {
   background-color: #333;
   color: #fff;
 }
+/*
+.preview-btn:hover {
+  background-color: #333;
+  color: #fff;
+} */
 
 @media (max-width: 600px) {
   .proposal-button {
