@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import logo from "../../assets/bidnest.png";
-import { TextField, Button, Typography, Box } from "@mui/material";
+import { TextField, Button, Typography, Box, Snackbar, Alert } from "@mui/material";
 import { loginUser } from "../../services/Login";
 import { userLogin } from "../../services/UserLogin";
 import Back from "../../widgets/BackToHomeButton/Back";
@@ -10,6 +10,16 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   const handleLogin = async () => {
     try {
@@ -20,7 +30,16 @@ function App() {
         console.log("Login successful:", response.data);
         // Save user info to localStorage/sessionStorage if needed
         localStorage.setItem("token", response.data.token);
-        window.location.href = "/"; // Redirect to dashboard
+        
+        // Show success snackbar
+        setSnackbarMessage("Vendor login successful! Redirecting...");
+        setSnackbarSeverity("success");
+        setOpenSnackbar(true);
+        
+        // Redirect after a short delay (1.5 seconds)
+        setTimeout(() => {
+          window.location.href = "/"; // Redirect to dashboard
+        }, 1500);
       }
     } catch (error) {
       // Handle error
@@ -30,6 +49,11 @@ function App() {
       setErrorMessage(
         error.response?.data?.message || "Invalid email or password."
       );
+      
+      // Show error snackbar
+      setSnackbarMessage(error.response?.data?.message || "Login failed. Please try again.");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
     }
   };
 
@@ -122,7 +146,7 @@ function App() {
 
                 {/* Login Button */}
                 <Button
-                className='buttonDesign'
+                  className='buttonDesign'
                   variant="contained"
                   color="primary"
                   size="large"
@@ -183,6 +207,22 @@ function App() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
+      
+      {/* Snackbar for notifications */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

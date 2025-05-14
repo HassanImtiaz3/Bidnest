@@ -16,6 +16,7 @@ import { validateField } from "../../utils/validation"; // Import validation fun
 import { submitUser } from "../../services/User";
 import { useNavigate } from "react-router-dom";
 import Back from "../../widgets/BackToHomeButton/Back";
+import { v4 as uuidv4 } from 'uuid';
 
 const RegistrationForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +29,7 @@ const RegistrationForm = () => {
     password: "",
     confirmPassword: "",
     role: "user",
+    uuid: uuidv4(),
   });
   const [errors, setErrors] = useState({});
   const [error, setError] = useState("");

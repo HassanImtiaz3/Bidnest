@@ -13,13 +13,17 @@ import AboutUs from "./pages/AboutUsPage/index.jsx";
 import PostNow from "./pages/PostNowPage/index.jsx";
 import Post from "./components/Post/Post";
 import ProtectedRoute from "./services/ProtectedRoute.js";
-import VendorDashboard from './components/VendorDashboard/VendorDashboard.jsx';
-import UserDashboard from './components/UserDashboard/UserDashboard.jsx';
+import VendorDashboard from "./components/VendorDashboard/VendorDashboard.jsx";
+import UserDashboard from "./components/UserDashboard/UserDashboard.jsx";
+import { VendorRoute, UserRoute } from "./services/ProtectedRoute.js";
+import ScrollToTop from "./utils/scrollTop.jsx";
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Header />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
@@ -30,17 +34,18 @@ function App() {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/why-bidnest" element={<WhyBidnest />} />
-        <Route
-          path="/post-now"
-          element={
-            <ProtectedRoute>
-              <PostNow />
-            </ProtectedRoute>
-          }
-        />
         <Route path="/post" element={<Post />} />
-         <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-         <Route path="/user-dashboard" element={<UserDashboard />} />
+
+        {/* Vendor-only routes */}
+        <Route element={<VendorRoute />}>
+          <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+        </Route>
+
+        {/* User-only routes */}
+        <Route element={<UserRoute />}>
+          <Route path="/post-now" element={<PostNow />} />
+          <Route path="/user-dashboard" element={<UserDashboard />} />
+        </Route>
       </Routes>
     </Router>
   );
