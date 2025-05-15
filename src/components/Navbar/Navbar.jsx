@@ -29,16 +29,13 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalType, setModalType] = React.useState(""); // 'login' or 'signup'
-  
-  // Snackbar states
+
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
   const [snackbarSeverity, setSnackbarSeverity] = React.useState("success");
 
   const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setOpenSnackbar(false);
   };
 
@@ -46,13 +43,11 @@ function ResponsiveAppBar() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    
-    // Show logout success snackbar
+
     setSnackbarMessage("Logged out successfully!");
     setSnackbarSeverity("success");
     setOpenSnackbar(true);
-    
-    // Redirect after a short delay
+
     setTimeout(() => {
       navigate("/");
     }, 1500);
@@ -74,7 +69,8 @@ function ResponsiveAppBar() {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-  const userRole = localStorage.getItem('user.role'); // Get the user role from localStorage
+
+  const userRole = user?.role; // ✅ Corrected: now gets role from parsed user object
 
   const pages = [
     { title: "Bid Search", path: "/bid-search" },
@@ -82,12 +78,8 @@ function ResponsiveAppBar() {
     { title: "About Bidnest", path: "/about-us" },
     { title: "Contact Us", path: "/contact-us" },
     { title: "Why Bidnest ?", path: "/why-bidnest" },
-    ...(userRole === 'user' ? [
-      { title: "Post Now", path: "/post-now" },  // For 'user' role
-    ] : []),
-    ...(userRole === 'vendor' ? [
-      { title: "Bid Now", path: "/post" },    // For 'vendor' role
-    ] : []),
+    ...(userRole === 'user' ? [{ title: "View All Posts", path: "/post" }] : []),
+    ...(userRole === 'vendor' ? [{ title: "View All Posts For Bid", path: "/post" }] : []),
   ];
 
   return (
@@ -101,7 +93,6 @@ function ResponsiveAppBar() {
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            {/* Logo */}
             <Typography
               variant="h6"
               noWrap
@@ -124,7 +115,6 @@ function ResponsiveAppBar() {
               />
             </Typography>
 
-            {/* Mobile Menu Icon */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -137,18 +127,11 @@ function ResponsiveAppBar() {
                 <MenuIcon />
               </IconButton>
 
-              {/* Mobile Menu */}
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                transformOrigin={{ vertical: "top", horizontal: "left" }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
@@ -169,35 +152,44 @@ function ResponsiveAppBar() {
               </Menu>
             </Box>
 
-            {/* Navbar links for desktop */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map(({ title, path }) => (
-                <Button
-                  key={title}
-                  sx={{
-                    my: 2,
-                    color: theme.palette.text.primary,
-                    display: "block",
-                  }}
-                  onClick={() => navigate(path)}
-                >
-                  {title}
-                </Button>
-              ))}
+              {pages.map(({ title, path }) => {
+                const isHighlighted =
+                  title === "View All Posts" || title === "View All Posts For Bid";
+
+                return (
+                  <Button
+                    key={title}
+                    onClick={() => navigate(path)}
+                    sx={{
+                      my: 2,
+                      display: "block",
+                      bgcolor: isHighlighted ? "black" : "transparent",
+                      color: isHighlighted ? "white" : theme.palette.text.primary,
+                      fontWeight: isHighlighted ? "bold" : "normal",
+                      "&:hover": {
+                        bgcolor: isHighlighted ? "#333" : theme.palette.action.hover,
+                      },
+                    }}
+                  >
+                    {title}
+                  </Button>
+                );
+              })}
             </Box>
 
-            {/* User Profile Section */}
+
+
             <Box sx={{ flexGrow: 0, display: "flex", alignItems: "center" }}>
               {user ? (
                 <>
-                  {/* Profile Avatar and Name */}
                   <Avatar
                     sx={{
                       bgcolor: theme.palette.primary.main,
                       color: theme.palette.text.secondary,
                       width: 40,
                       height: 40,
-                      mr: 1,
+                      mr: 3,
                     }}
                   >
                     {user.firstName.charAt(0).toUpperCase()}
@@ -212,8 +204,6 @@ function ResponsiveAppBar() {
                   >
                     {user.firstName.toUpperCase()}
                   </Typography>
-
-                  {/* Logout Button */}
                   <Button
                     className="buttonDesign"
                     variant="contained"
@@ -230,7 +220,6 @@ function ResponsiveAppBar() {
                 </>
               ) : (
                 <>
-                  {/* Login & SignUp Buttons */}
                   <Button
                     sx={{
                       mx: 1,
@@ -265,7 +254,6 @@ function ResponsiveAppBar() {
               )}
             </Box>
 
-            {/* Auth Modal */}
             <AuthModal
               open={modalOpen}
               handleClose={handleCloseModal}
@@ -275,16 +263,15 @@ function ResponsiveAppBar() {
           </Toolbar>
         </Container>
       </AppBar>
-      
-      {/* Snackbar for notifications */}
+
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbarSeverity}
           sx={{ width: "100%" }}
         >
