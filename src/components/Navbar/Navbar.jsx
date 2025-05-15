@@ -74,7 +74,7 @@ function ResponsiveAppBar() {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-  const userRole = localStorage.getItem('user.role'); // Get the user role from localStorage
+  const userRole = user?.role; // Get the user role from localStorage
 
   const pages = [
     { title: "Bid Search", path: "/bid-search" },
@@ -83,7 +83,7 @@ function ResponsiveAppBar() {
     { title: "Contact Us", path: "/contact-us" },
     { title: "Why Bidnest ?", path: "/why-bidnest" },
     ...(userRole === 'user' ? [
-      { title: "Post Now", path: "/post-now" },  // For 'user' role
+      { title: "Post", path: "/post" },  // For 'user' role
     ] : []),
     ...(userRole === 'vendor' ? [
       { title: "Bid Now", path: "/post" },    // For 'vendor' role
