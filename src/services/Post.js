@@ -65,6 +65,7 @@ export const getPost = async () => {
     }
 
     console.log("[INFO] Post fetch successfully:", response?.data);
+    localStorage.setItem("post", JSON.stringify(response?.data));
     return {
       success: true,
       data: response?.data,
