@@ -46,7 +46,7 @@ export const submitPost = async (postData) => {
 export const getPost = async () => {
   try {
     const user = JSON.parse(localStorage.getItem("user")); // Parse once
-    const userId = user?._id;
+    const userId = user?.uuid;
     const role = user?.role;
 
     let response;

@@ -69,8 +69,7 @@ function ResponsiveAppBar() {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-
-  const userRole = user?.role; // ✅ Corrected: now gets role from parsed user object
+  const userRole = user?.role; // Get the user role from localStorage
 
   const pages = [
     { title: "Bid Search", path: "/bid-search" },
@@ -78,8 +77,12 @@ function ResponsiveAppBar() {
     { title: "About Bidnest", path: "/about-us" },
     { title: "Contact Us", path: "/contact-us" },
     { title: "Why Bidnest ?", path: "/why-bidnest" },
-    ...(userRole === 'user' ? [{ title: "View All Posts", path: "/post" }] : []),
-    ...(userRole === 'vendor' ? [{ title: "View All Posts For Bid", path: "/post" }] : []),
+    ...(userRole === 'user' ? [
+      { title: "Post", path: "/post" },  // For 'user' role
+    ] : []),
+    ...(userRole === 'vendor' ? [
+      { title: "Bid Now", path: "/post" },    // For 'vendor' role
+    ] : []),
   ];
 
   return (
