@@ -6,19 +6,36 @@ const api = axios.create({
 
 export const submitPost = async (postData) => {
   try {
-    console.log("[DEBUG] Sending Post Data", postData);
-    const userId = localStorage.getItem("user"); // Adjust key name based on your storage
-    const user = JSON.parse(userId); // Parse the string into an object
+    console.log("[DEBUG] Raw Post Data to Submit:", postData);
 
-    console.log("asdadasd", userId);
+    const userRaw = localStorage.getItem("user");
+    let user = null;
+
+    try {
+      user = userRaw && typeof userRaw === "string" ? JSON.parse(userRaw) : null;
+    } catch (err) {
+      console.error("[ERROR] Failed to parse user from localStorage:", err);
+      return {
+        success: false,
+        error: "Invalid user data in localStorage. Please login again.",
+      };
+    }
+
+    if (!user || !user._id) {
+      return {
+        success: false,
+        error: "User not found. Please login again.",
+      };
+    }
 
     const dataToSend = {
       ...postData,
-      user: user?._id, // send MongoDB _id, not uuid
-      uuid: user?.uuid,
+      user: user._id, // MongoDB ID
+      uuid: user.uuid, // custom uuid if required
     };
 
-    console.log("[DEBUG] Sending Post Data", dataToSend);
+    console.log("[DEBUG] Final Data Sent to Backend:", dataToSend);
+
     const response = await api.post("/create-post", dataToSend, {
       headers: {
         "Content-Type": "application/json",
@@ -38,14 +55,16 @@ export const submitPost = async (postData) => {
 
     return {
       success: false,
-      error: error.response?.data?.message,
+      error: error.response?.data?.message || "Failed to create post",
     };
   }
 };
 
 export const getPost = async () => {
   try {
-    const user = JSON.parse(localStorage.getItem("user")); // Parse once
+    const userRaw = localStorage.getItem("user");
+    const user = userRaw ? JSON.parse(userRaw) : null;
+
     const userId = user?.uuid;
     const role = user?.role;
 
@@ -64,7 +83,7 @@ export const getPost = async () => {
       });
     }
 
-    console.log("[INFO] Post fetch successfully:", response?.data);
+    console.log("[INFO] Posts fetched successfully:", response?.data);
     localStorage.setItem("post", JSON.stringify(response?.data));
     return {
       success: true,
