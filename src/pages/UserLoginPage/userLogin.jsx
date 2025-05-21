@@ -62,7 +62,11 @@ function App() {
   return (
     <>
       <Back />
-      <MDBContainer fluid className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}>
+      <MDBContainer
+        fluid
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
+      >
         <MDBRow className="w-100 justify-content-center">
           <MDBCol md="6" lg="5">
             <Box
@@ -75,6 +79,11 @@ function App() {
               boxShadow={4}
               width="100%"
             >
+              {/* Heading */}
+              <Typography variant="h5" fontWeight={600} mb={2} color="primary">
+                User Login
+              </Typography>
+
               {/* Logo */}
               <Box
                 mb={4}
