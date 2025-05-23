@@ -81,7 +81,8 @@ function ResponsiveAppBar() {
       { title: "Post", path: "/post" },  // For 'user' role
     ] : []),
     ...(userRole === 'vendor' ? [
-      { title: "Bid Now", path: "/post" },    // For 'vendor' role
+      { title: "Bid Now", path: "/post" },
+      { title: "Bid Status", path: "/vendor-status-dashboard" }    // For 'vendor' role
     ] : []),
   ];
 

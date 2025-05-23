@@ -15,6 +15,7 @@ import Post from "./components/Post/Post";
 import ProtectedRoute from "./services/ProtectedRoute.js";
 import VendorDashboard from "./components/VendorDashboard/VendorDashboard.jsx";
 import UserDashboard from "./components/UserDashboard/UserDashboard.jsx";
+import VendorStatusDashboard from "./components/VendorStatusDashboard/VendorStatusDashboard.jsx";
 import { VendorRoute, UserRoute } from "./services/ProtectedRoute.js";
 import ScrollToTop from "./utils/scrollTop.jsx";
 
@@ -39,6 +40,7 @@ function App() {
         {/* Vendor-only routes */}
         <Route element={<VendorRoute />}>
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+          <Route path="/vendor-status-dashboard" element={<VendorStatusDashboard />} />
         </Route>
 
         {/* User-only routes */}

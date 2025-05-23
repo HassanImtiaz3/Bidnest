@@ -1,12 +1,18 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import logo from "../../assets/bidnest.png";
-import { TextField, Button, Typography, Box, Snackbar, Alert } from "@mui/material";
-import { loginUser } from "../../services/Login";
-import { userLogin } from "../../services/UserLogin";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import { loginUser } from "../../services/Login"; // Assuming vendor login uses this service
 import Back from "../../widgets/BackToHomeButton/Back";
 
-function App() {
+function VendorLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -15,7 +21,7 @@ function App() {
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpenSnackbar(false);
@@ -23,35 +29,27 @@ function App() {
 
   const handleLogin = async () => {
     try {
-      // Send the email and password to your backend
       const response = await loginUser({ email, password });
 
       if (response.status === 200) {
-        console.log("Login successful:", response.data);
-        // Save user info to localStorage/sessionStorage if needed
         localStorage.setItem("token", response.data.token);
-        
-        // Show success snackbar
+
         setSnackbarMessage("Vendor login successful! Redirecting...");
         setSnackbarSeverity("success");
         setOpenSnackbar(true);
-        
-        // Redirect after a short delay (1.5 seconds)
+
         setTimeout(() => {
-          window.location.href = "/"; // Redirect to dashboard
+          window.location.href = "/"; // Redirect to vendor dashboard or homepage
         }, 1500);
       }
     } catch (error) {
-      // Handle error
       console.error("Login failed:", error.response?.data || error.message);
-
-      // Display a meaningful error message to the user
       setErrorMessage(
         error.response?.data?.message || "Invalid email or password."
       );
-      
-      // Show error snackbar
-      setSnackbarMessage(error.response?.data?.message || "Login failed. Please try again.");
+      setSnackbarMessage(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
       setSnackbarSeverity("error");
       setOpenSnackbar(true);
     }
@@ -60,154 +58,152 @@ function App() {
   return (
     <>
       <Back />
-
-      <MDBContainer fluid>
-        <MDBRow>
-          <MDBCol sm="6">
+      <MDBContainer
+        fluid
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "100vh", backgroundColor: "#f8f9fa" }}
+      >
+        <MDBRow className="w-100 justify-content-center">
+          <MDBCol md="6" lg="5">
             <Box
               display="flex"
-              justifyContent="center"
+              flexDirection="column"
               alignItems="center"
-              minHeight="100vh"
-              bgcolor="#f8f9fa"
+              bgcolor="white"
+              p={4}
+              borderRadius={3}
+              boxShadow={4}
+              width="100%"
             >
+              {/* Heading */}
+              <Typography variant="h5" fontWeight={600} mb={2} color="primary">
+                Vendor Login
+              </Typography>
+
+              {/* Logo */}
               <Box
+                mb={4}
                 display="flex"
-                flexDirection="column"
+                justifyContent="center"
                 alignItems="center"
-                bgcolor="white"
-                p={4}
-                borderRadius={2}
+                width={120}
+                height={120}
+                borderRadius="50%"
+                bgcolor="#e8eaf6"
                 boxShadow={3}
-                maxWidth={400}
-                width="100%"
+                sx={{
+                  transition: "transform 0.3s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
               >
-                {/* Logo */}
-                <Box mb={2}>
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    style={{ height: "70px", width: "auto" }}
-                  />
-                </Box>
-
-                {/* Email Input */}
-                <TextField
-                  label="Email address"
-                  type="email"
-                  fullWidth
-                  required
-                  variant="outlined"
-                  margin="normal"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  sx={{
-                    "& .MuiInputLabel-root": {
-                      color: "#000000",
-                    },
-                    "& .MuiInputBase-input": {
-                      color: "#000000",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "#000000",
-                    },
+                <img
+                  src={logo}
+                  alt="Logo"
+                  style={{
+                    height: "80px",
+                    width: "auto",
+                    objectFit: "contain",
                   }}
                 />
-
-                {/* Password Input */}
-                <TextField
-                  label="Password"
-                  type="password"
-                  fullWidth
-                  required
-                  variant="outlined"
-                  margin="normal"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  sx={{
-                    "& .MuiInputLabel-root": {
-                      color: "#000000",
-                    },
-                    "& .MuiInputBase-input": {
-                      color: "#000000",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "#000000",
-                    },
-                  }}
-                />
-
-                {/* Error Message */}
-                {errorMessage && (
-                  <Typography color="error" mt={2}>
-                    {errorMessage}
-                  </Typography>
-                )}
-
-                {/* Login Button */}
-                <Button
-                  className='buttonDesign'
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                  onClick={handleLogin}
-                  sx={{
-                    mt: 2,
-                    mb: 3,
-                    color: "white",
-                    "&:hover": {
-                      backgroundColor: "primary.dark",
-                    },
-                  }}
-                >
-                  Vendor LOGIN
-                </Button>
-
-                {/* Forgot Password */}
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  textAlign="center"
-                  mb={2}
-                >
-                  <a
-                    href="#!"
-                    style={{ textDecoration: "none", color: "#673de6" }}
-                  >
-                    Forgot password?
-                  </a>
-                </Typography>
-
-                {/* Register Link */}
-                <Typography variant="body2" textAlign="center">
-                  Don't have an account?{" "}
-                  <a
-                    href="/registration"
-                    style={{ color: "#673de6", textDecoration: "none" }}
-                  >
-                    Register here
-                  </a>
-                </Typography>
               </Box>
-            </Box>
-          </MDBCol>
 
-          <MDBCol sm="6" className="d-none d-sm-block px-0">
-            <img
-              src="assets/companies/right.jpg"
-              alt="Login image"
-              className="w-100"
-              style={{
-                height: "100vh",
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-            />
+              {/* Email Input */}
+              <TextField
+                label="Email address"
+                type="email"
+                fullWidth
+                required
+                variant="outlined"
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#000000",
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#000000",
+                  },
+                }}
+              />
+
+              {/* Password Input */}
+              <TextField
+                label="Password"
+                type="password"
+                fullWidth
+                required
+                variant="outlined"
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#000000",
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#000000",
+                  },
+                }}
+              />
+
+              {/* Error Message */}
+              {errorMessage && (
+                <Typography color="error" mt={2}>
+                  {errorMessage}
+                </Typography>
+              )}
+
+              {/* Login Button */}
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                fullWidth
+                onClick={handleLogin}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  color: "white",
+                  fontWeight: 600,
+                  letterSpacing: 1,
+                }}
+              >
+                VENDOR LOGIN
+              </Button>
+
+              {/* Forgot Password */}
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                textAlign="center"
+                mb={1}
+              >
+                <a
+                  href="#!"
+                  style={{ textDecoration: "none", color: "#673de6" }}
+                >
+                  Forgot password?
+                </a>
+              </Typography>
+
+              {/* Register Link */}
+              <Typography variant="body2" textAlign="center">
+                Don't have an account?{" "}
+                <a
+                  href="/vendor-registration"
+                  style={{ color: "#673de6", textDecoration: "none" }}
+                >
+                  Register here
+                </a>
+              </Typography>
+            </Box>
           </MDBCol>
         </MDBRow>
       </MDBContainer>
-      
+
       {/* Snackbar for notifications */}
       <Snackbar
         open={openSnackbar}
@@ -215,8 +211,8 @@ function App() {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbarSeverity}
           sx={{ width: "100%" }}
         >
@@ -227,4 +223,4 @@ function App() {
   );
 }
 
-export default App;
+export default VendorLogin;

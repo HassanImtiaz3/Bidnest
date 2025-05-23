@@ -3,6 +3,7 @@
   margin-bottom: 50px !important;
   font-weight: bold !important;
   text-align: center;
+  
 }
 
 .company-table-container {
@@ -55,25 +56,35 @@
 }
 
 .accept-btn {
-  background: linear-gradient(to right, #4caf50, #388e3c);
+  background: linear-gradient(to right, #8e24aa, #6a1b9a);
 }
 
 .accept-btn:hover {
-  background: linear-gradient(to right, #388e3c, #4caf50);
+  background: linear-gradient(to right, #6a1b9a, #8e24aa);
 }
 
 .reject-btn {
-  background: linear-gradient(to right, #f44336, #d32f2f);
+   background: linear-gradient(to right, #8e24aa, #6a1b9a);
 }
 
 .reject-btn:hover {
-  background: linear-gradient(to right, #d32f2f, #f44336);
+  background: linear-gradient(to right, #6a1b9a, #8e24aa);
 }
 
 .preview-btn {
-  background-color: #333;
-  color: #fff;
+   background: linear-gradient(to right, #8e24aa, #6a1b9a);
 }
+.preview-btn:hover{
+  background: linear-gradient(to right, #6a1b9a, #8e24aa);
+}
+
+
+.category-cell {
+  font-weight: 500;
+  color: #555;
+  padding: 12px;
+}
+
 /*
 .preview-btn:hover {
   background-color: #333;

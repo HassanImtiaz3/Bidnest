@@ -25,8 +25,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import Navbar from '../../components/Navbar/Navbar';
-import Footer from '../../components/Footer/Footer';
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 import './VendorDashboard.css';
 import { useLocation } from 'react-router-dom';
 import ProposalService from '../../services/proposalService';
@@ -323,42 +323,42 @@ const VendorDashboard = () => {
           <Typography variant="h6" gutterBottom mt={4}>Device Specification</Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField fullWidth size="small" required name="productName" label="Product Name"
+              <TextField fullWidth size="small" name="productName" label="Product Name"
                 value={formState.productName || ''} onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth size="small" required name="description" label="Description"
+              <TextField fullWidth size="small" name="description" label="Description"
                 value={formState.description || ''} onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth size="small" required name="modelNumber" label="Model Number"
+              <TextField fullWidth size="small" name="modelNumber" label="Model Number"
                 value={formState.modelNumber || ''} onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth size="small" required name="color" label="Color"
+              <TextField fullWidth size="small" name="color" label="Color"
                 value={formState.color || ''} onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField fullWidth size="small" required name="size" label="Size"
+              <TextField fullWidth size="small" name="size" label="Size"
                 value={formState.size || ''} onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField fullWidth size="small" required name="weight" label="Weight"
+              <TextField fullWidth size="small" name="weight" label="Weight"
                 value={formState.weight || ''} onChange={handleInputChange} type="number"
               />
             </Grid>
             <Grid item xs={4}>
-              <TextField fullWidth size="small" required name="warranty" label="Warranty Information"
+              <TextField fullWidth size="small" name="warranty" label="Warranty Information"
                 value={formState.warranty || ''} onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField fullWidth size="small" required name="deliveryTime" label="Delivery Time Frame"
+              <TextField fullWidth size="small" name="deliveryTime" label="Delivery Time Frame"
                 value={formState.deliveryTime || ''} onChange={handleInputChange}
               />
             </Grid>
