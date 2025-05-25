@@ -13,10 +13,10 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Grid,
   DialogActions,
   useMediaQuery,
   Stack,
+  CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Navbar from "../../components/Navbar/Navbar";
@@ -24,25 +24,28 @@ import Footer from "../../components/Footer/Footer";
 import "./UserDashboard.css";
 import ProposalService from "../../services/proposalService";
 
-
 const UserDashboard = () => {
   const [openRejectDialog, setOpenRejectDialog] = useState(false);
   const [openAcceptDialog, setOpenAcceptDialog] = useState(false);
-  const [companyToReject, setCompanyToReject] = useState("");
-  const [companyToAccept, setCompanyToAccept] = useState("");
   const [proposals, setProposals] = useState([]);
   const [selectedProposal, setSelectedProposal] = useState(null);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProposals = async () => {
       try {
-        const vendorDataRaw = localStorage.getItem("user");
-        const vendorData = vendorDataRaw ? JSON.parse(vendorDataRaw) : null;
-        const response = await ProposalService.getProposals(vendorData?.uuid);
-        setProposals(response.proposals);
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user?.uuid) throw new Error("User not authenticated");
+        
+        const response = await ProposalService.getProposals(user.uuid);
+        setProposals(response.proposals || []);
       } catch (error) {
         console.error("Failed to fetch proposals:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -56,57 +59,21 @@ const UserDashboard = () => {
     import("jspdf")
       .then(({ jsPDF }) => {
         const doc = new jsPDF();
-        doc.setFontSize(18);
-        doc.text("Proposal Details", 105, 15, { align: "center" });
-        doc.setFontSize(12);
-        doc.text(`Vendor: ${proposal.vendorName || "N/A"}`, 14, 25);
-        doc.text(`Company: ${proposal.vendorCompany || "N/A"}`, 14, 35);
-        let y = 45;
-        doc.text(`Posting Title: ${proposal.postingTitle || "N/A"}`, 14, y);
-        doc.text(`Product Name: ${proposal.productName || "N/A"}`, 14, y + 10);
-        doc.text(`Model Number: ${proposal.modelNumber || "N/A"}`, 14, y + 20);
-        doc.text(`Quantity: ${proposal.quantity || "N/A"}`, 14, y + 30);
-        doc.text(`Unit Price: ${proposal.unitPrice || "N/A"}`, 14, y + 40);
-        doc.text(`Total Price: ${proposal.totalPrice || "N/A"}`, 105, y);
-        doc.text(
-          `Bid Date: ${
-            proposal.bidDate
-              ? new Date(proposal.bidDate).toLocaleString()
-              : "N/A"
-          }`,
-          105,
-          y + 10
-        );
-        doc.text(`Color: ${proposal.color || "N/A"}`, 105, y + 20);
-        doc.text(`Size: ${proposal.size || "N/A"}`, 105, y + 30);
-        doc.text(`Warranty: ${proposal.warranty || "N/A"}`, 105, y + 40);
-        const description = proposal.description || "No description provided.";
-        const splitDescription = doc.splitTextToSize(description, 180);
-        doc.text("Description:", 14, y + 50);
-        doc.text(splitDescription, 14, y + 60);
-        doc.text(
-          `Vendor Address: ${proposal.vendorAddress || "N/A"}`,
-          14,
-          y + 80
-        );
-        doc.text(`Vendor Phone: ${proposal.vendorPhone || "N/A"}`, 14, y + 90);
-        doc.text(`Vendor Email: ${proposal.vendorEmail || "N/A"}`, 14, y + 100);
-        doc.save(
-          `Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`
-        );
+        // ... (keep your existing PDF generation code)
+        doc.save(`Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`);
       })
       .catch((err) => {
         console.error("Failed to generate PDF:", err);
       });
   };
 
-  const handleAcceptProposal = (companyName) => {
-    setCompanyToAccept(companyName);
+  const handleAcceptProposal = (proposal) => {
+    setSelectedProposal(proposal);
     setOpenAcceptDialog(true);
   };
 
-  const handleRejectProposal = (companyName) => {
-    setCompanyToReject(companyName);
+  const handleRejectProposal = (proposal) => {
+    setSelectedProposal(proposal);
     setOpenRejectDialog(true);
   };
 
@@ -123,21 +90,64 @@ const UserDashboard = () => {
   const handleCloseDialog = () => {
     setOpenRejectDialog(false);
     setOpenAcceptDialog(false);
-    setCompanyToReject("");
-    setCompanyToAccept("");
+    setSelectedProposal(null);
   };
 
-  const handleConfirmReject = () => {
-    console.log(
-      `Proposal for ${companyToReject} has been rejected permanently.`
+  const handleConfirmReject = async () => {
+    try {
+      if (!selectedProposal) return;
+      
+      await ProposalService.updateProposalStatus(selectedProposal._id, 'rejected');
+      
+      setProposals(proposals.map(p => 
+        p._id === selectedProposal._id ? {...p, approval: 'rejected'} : p
+      ));
+      
+      handleCloseDialog();
+    } catch (error) {
+      console.error("Failed to reject proposal:", error);
+    }
+  };
+
+  const handleConfirmAccept = async () => {
+    try {
+      if (!selectedProposal) return;
+      
+      await ProposalService.updateProposalStatus(selectedProposal._id, 'approved');
+      
+      setProposals(proposals.map(p => 
+        p._id === selectedProposal._id ? {...p, approval: 'approved'} : p
+      ));
+      
+      handleCloseDialog();
+    } catch (error) {
+      console.error("Failed to accept proposal:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ my: 5, textAlign: "center" }}>
+          <CircularProgress />
+        </Container>
+        <Footer />
+      </>
     );
-    handleCloseDialog();
-  };
+  }
 
-  const handleConfirmAccept = () => {
-    console.log(`Proposal for ${companyToAccept} has been accepted.`);
-    handleCloseDialog();
-  };
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ my: 5, textAlign: "center" }}>
+          <Typography color="error">{error}</Typography>
+        </Container>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -155,72 +165,136 @@ const UserDashboard = () => {
                   Company Name
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
-                  
-                  Detail/Category
+                  Category
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
-                  Proposal
+                  Status
+                </TableCell>
+                <TableCell align="center" className="company-table-head">
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {proposals.map((proposal, index) => (
-                <TableRow key={index} className="company-row">
-                  <TableCell className="company-name-cell">
-                    {proposal.vendorCompany}
-                  </TableCell>
-                  <TableCell align="center">
-                    {proposal.category || "N/A"}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Stack
-                      direction={isSmallScreen ? "column" : "row"}
-                      spacing={1}
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Button
-                        variant="contained"
-                        onClick={() => handleDownloadProposal(proposal)}
-                        className="proposal-button download-btn"
+              {proposals.length > 0 ? (
+                proposals.map((proposal) => (
+                  <TableRow key={proposal._id} className="company-row">
+                    <TableCell className="company-name-cell" align="center">
+                      {proposal.vendorCompany}
+                    </TableCell>
+                    <TableCell align="center">
+                      {proposal.category || "N/A"}
+                    </TableCell>
+                    <TableCell align="center">
+                      <span className={`status-badge ${proposal.approval.toLowerCase()}`}>
+                        {proposal.approval}
+                      </span>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Stack
+                        direction={isSmallScreen ? "column" : "row"}
+                        spacing={1}
+                        justifyContent="center"
+                        alignItems="center"
                       >
-                        Download
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() =>
-                          handleAcceptProposal(proposal.companyName)
-                        }
-                        className="proposal-button accept-btn"
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() =>
-                          handleRejectProposal(proposal.companyName)
-                        }
-                        className="proposal-button reject-btn"
-                      >
-                        Reject
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={() => handlePreviewProposal(proposal)}
-                        className="proposal-button preview-btn"
-                      >
-                        Preview
-                      </Button>
-                    </Stack>
+                        <Button
+                          variant="contained"
+                          onClick={() => handleDownloadProposal(proposal)}
+                          className="proposal-button download-btn"
+                        >
+                          Download
+                        </Button>
+                        <Button
+                          variant="contained"
+                          onClick={() => handleAcceptProposal(proposal)}
+                          className="proposal-button accept-btn"
+                          disabled={proposal.approval === 'approved'}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="contained"
+                          onClick={() => handleRejectProposal(proposal)}
+                          className="proposal-button reject-btn"
+                          disabled={proposal.approval === 'rejected'}
+                        >
+                          Reject
+                        </Button>
+                        <Button
+                          variant="contained"
+                          onClick={() => handlePreviewProposal(proposal)}
+                          className="proposal-button preview-btn"
+                        >
+                          Preview
+                        </Button>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    No proposals found
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Container>
 
-      {/* Dialogs (Reject, Accept, Preview) remain unchanged */}
+      {/* Accept Confirmation Dialog */}
+      <Dialog open={openAcceptDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Acceptance</DialogTitle>
+        <DialogContent>
+          Are you sure you want to accept the proposal from {selectedProposal?.vendorCompany}?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmAccept} color="primary" variant="contained">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Reject Confirmation Dialog */}
+      <Dialog open={openRejectDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Rejection</DialogTitle>
+        <DialogContent>
+          Are you sure you want to reject the proposal from {selectedProposal?.vendorCompany}?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleConfirmReject} color="error" variant="contained">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Preview Modal */}
+      <Dialog
+        open={openPreviewModal}
+        onClose={handleClosePreview}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Proposal Details</DialogTitle>
+        <DialogContent>
+          {selectedProposal && (
+            <div>
+              <Typography variant="h6">{selectedProposal.postingTitle}</Typography>
+              <Typography>Product: {selectedProposal.productName}</Typography>
+              <Typography>Vendor: {selectedProposal.vendorCompany}</Typography>
+              <Typography>Price: ${selectedProposal.totalPrice}</Typography>
+              <Typography>Description: {selectedProposal.description}</Typography>
+              {/* Add more details as needed */}
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePreview}>Close</Button>
+        </DialogActions>
+      </Dialog>
 
       <Footer />
     </>

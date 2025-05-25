@@ -9,43 +9,78 @@ import {
   TableHead,
   TableRow,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import "./VendorStatusDashboard.css";
+import ProposalService from "../../services/proposalService";
 
 const VendorStatusDashboard = () => {
   const [proposals, setProposals] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const dummyProposals = [
-      {
-        vendorCompany: "TechCorp Solutions",
-        category: "Electronics",
-        status: "Success",
-        productName: "Laptop",
-      },
-      {
-        vendorCompany: "BuildIt Inc.",
-        category: "Construction",
-        status: "Failure",
-        productName: "Cement Mixer",
-      },
-      {
-        vendorCompany: "FreshFoods Ltd.",
-        category: "Grocery",
-        status: "Pending",
-        productName: "Organic Apples",
-      },
-      {
-        vendorCompany: "MediSupplies",
-        category: "Medical",
-        status: "Inprocess",
-        productName: "First Aid Kits",
-      },
-    ];
-    setProposals(dummyProposals);
+    const fetchProposals = async () => {
+      try {
+        // Get user from local storage
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.uuid) {
+          throw new Error("Vendor UUID not found in user data");
+        }
+
+        const vendorId = user.uuid; // Using uuid as vendorId
+        const response = await ProposalService.getProposalsForVendor(vendorId);
+        console.log("asdasdasdasd", response);
+        setProposals(response.proposals || []);
+      } catch (err) {
+        console.error("Error fetching proposals:", err);
+        setError(err.message || "Failed to fetch proposals");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProposals();
   }, []);
+
+  const getStatusBadgeClass = (status) => {
+    switch (status.toLowerCase()) {
+      case "approved":
+        return "success";
+      case "rejected":
+        return "failure";
+      case "pending":
+        return "pending";
+      default:
+        return "inprocess";
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ my: 5, textAlign: "center" }}>
+          <CircularProgress />
+        </Container>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <Container maxWidth="lg" sx={{ my: 5, textAlign: "center" }}>
+          <Typography color="error">{error}</Typography>
+        </Container>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -63,7 +98,10 @@ const VendorStatusDashboard = () => {
                   Company Name
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
-                  Detail/Category
+                  Product Name
+                </TableCell>
+                <TableCell align="center" className="company-table-head">
+                  Category
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
                   Status
@@ -71,23 +109,36 @@ const VendorStatusDashboard = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {proposals.map((proposal, index) => (
-                <TableRow key={index} className="company-row">
-                  <TableCell className="company-name-cell" align="center">
-                    {proposal.vendorCompany}
-                  </TableCell>
-                  <TableCell align="center">
-                    {proposal.category || "N/A"}
-                  </TableCell>
-                  <TableCell align="center">
-                    <span
-                      className={`status-badge ${proposal.status.toLowerCase()}`}
-                    >
-                      {proposal.status}
-                    </span>
+              {proposals.length > 0 ? (
+                proposals.map((proposal) => (
+                  <TableRow key={proposal._id} className="company-row">
+                    <TableCell className="company-name-cell" align="center">
+                      {proposal.vendorCompany || proposal.vendorName || "N/A"}
+                    </TableCell>
+                    <TableCell align="center">
+                      {proposal.productName || "N/A"}
+                    </TableCell>
+                    <TableCell align="center">
+                      {proposal.category || "N/A"}
+                    </TableCell>
+                    <TableCell align="center">
+                      <span
+                        className={`status-badge ${getStatusBadgeClass(
+                          proposal.approval
+                        )}`}
+                      >
+                        {proposal.approval}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    No proposals found
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </TableContainer>

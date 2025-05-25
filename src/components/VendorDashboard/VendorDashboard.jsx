@@ -153,9 +153,11 @@ const VendorDashboard = () => {
       };
   
       const payload = {
-        ...formattedData,
+        ...formattedData, 
         userId: postId,
         vendorId,
+        postId: postData?._id,
+        category: postData?.category
       };
   
       const result = await ProposalService.submitProposal(payload);
