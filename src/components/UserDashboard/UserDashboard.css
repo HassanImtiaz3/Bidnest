@@ -98,3 +98,25 @@
     padding: 5px 10px;
   }
 }
+/* Add this section to your CSS to reflect status badge colors */
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+  display: inline-block;
+}
+
+.status-badge.approved {
+  background-color: #28a745; /* success green */
+}
+
+.status-badge.rejected {
+  background-color: #dc3545; /* error red */
+}
+
+.status-badge.pending {
+  background-color: #6c757d; /* optional: gray for pending or default */
+}
