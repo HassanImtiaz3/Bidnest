@@ -78,7 +78,8 @@ function ResponsiveAppBar() {
     { title: "Contact Us", path: "/contact-us" },
     { title: "Why Bidnest ?", path: "/why-bidnest" },
     ...(userRole === 'user' ? [
-      { title: "Post", path: "/post" },  // For 'user' role
+      { title: "Post", path: "/post" }, 
+      { title: "Post Status", path: "/user-dashboard" } // For 'user' role
     ] : []),
     ...(userRole === 'vendor' ? [
       { title: "Bid Now", path: "/post" },
