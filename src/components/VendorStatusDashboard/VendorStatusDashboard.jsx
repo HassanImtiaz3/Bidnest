@@ -24,15 +24,13 @@ const VendorStatusDashboard = () => {
   useEffect(() => {
     const fetchProposals = async () => {
       try {
-        // Get user from local storage
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.uuid) {
           throw new Error("Vendor UUID not found in user data");
         }
 
-        const vendorId = user.uuid; // Using uuid as vendorId
+        const vendorId = user.uuid;
         const response = await ProposalService.getProposalsForVendor(vendorId);
-        console.log("asdasdasdasd", response);
         setProposals(response.proposals || []);
       } catch (err) {
         console.error("Error fetching proposals:", err);
@@ -55,6 +53,19 @@ const VendorStatusDashboard = () => {
         return "pending";
       default:
         return "inprocess";
+    }
+  };
+
+  const getDisplayStatus = (status) => {
+    switch (status.toLowerCase()) {
+      case "approved":
+        return "Accepted";
+      case "rejected":
+        return "Rejected";
+      case "pending":
+        return "Pending";
+      default:
+        return status;
     }
   };
 
@@ -123,11 +134,9 @@ const VendorStatusDashboard = () => {
                     </TableCell>
                     <TableCell align="center">
                       <span
-                        className={`status-badge ${getStatusBadgeClass(
-                          proposal.approval
-                        )}`}
+                        className={`status-badge ${getStatusBadgeClass(proposal.approval)}`}
                       >
-                        {proposal.approval}
+                        {getDisplayStatus(proposal.approval)}
                       </span>
                     </TableCell>
                   </TableRow>

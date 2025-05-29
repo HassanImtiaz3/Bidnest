@@ -17,8 +17,10 @@ import {
   useMediaQuery,
   Stack,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import CloseIcon from "@mui/icons-material/Close";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import "./UserDashboard.css";
@@ -38,7 +40,7 @@ const UserDashboard = () => {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user?.uuid) throw new Error("User not authenticated");
-        
+
         const response = await ProposalService.getProposals(user.uuid);
         setProposals(response.proposals || []);
       } catch (error) {
@@ -59,7 +61,10 @@ const UserDashboard = () => {
     import("jspdf")
       .then(({ jsPDF }) => {
         const doc = new jsPDF();
-        // ... (keep your existing PDF generation code)
+        doc.text(`Proposal from ${proposal.vendorCompany}`, 10, 10);
+        doc.text(`Product Name: ${proposal.productName}`, 10, 20);
+        doc.text(`Total Price: $${proposal.totalPrice}`, 10, 30);
+        doc.text(`Description: ${proposal.description}`, 10, 40);
         doc.save(`Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`);
       })
       .catch((err) => {
@@ -96,13 +101,12 @@ const UserDashboard = () => {
   const handleConfirmReject = async () => {
     try {
       if (!selectedProposal) return;
-      
-      await ProposalService.updateProposalStatus(selectedProposal._id, 'rejected');
-      
-      setProposals(proposals.map(p => 
-        p._id === selectedProposal._id ? {...p, approval: 'rejected'} : p
-      ));
-      
+      await ProposalService.updateProposalStatus(selectedProposal._id, "rejected");
+      setProposals((prev) =>
+        prev.map((p) =>
+          p._id === selectedProposal._id ? { ...p, approval: "rejected" } : p
+        )
+      );
       handleCloseDialog();
     } catch (error) {
       console.error("Failed to reject proposal:", error);
@@ -112,16 +116,28 @@ const UserDashboard = () => {
   const handleConfirmAccept = async () => {
     try {
       if (!selectedProposal) return;
-      
-      await ProposalService.updateProposalStatus(selectedProposal._id, 'approved');
-      
-      setProposals(proposals.map(p => 
-        p._id === selectedProposal._id ? {...p, approval: 'approved'} : p
-      ));
-      
+      await ProposalService.updateProposalStatus(selectedProposal._id, "approved");
+      setProposals((prev) =>
+        prev.map((p) =>
+          p._id === selectedProposal._id ? { ...p, approval: "approved" } : p
+        )
+      );
       handleCloseDialog();
     } catch (error) {
       console.error("Failed to accept proposal:", error);
+    }
+  };
+
+  const handleResetStatus = async (proposal) => {
+    try {
+      await ProposalService.updateProposalStatus(proposal._id, "pending");
+      setProposals((prev) =>
+        prev.map((p) =>
+          p._id === proposal._id ? { ...p, approval: "pending" } : p
+        )
+      );
+    } catch (error) {
+      console.error("Failed to reset status:", error);
     }
   };
 
@@ -165,7 +181,7 @@ const UserDashboard = () => {
                   Company Name
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
-                  Category
+                  Product Name
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
                   Status
@@ -179,15 +195,13 @@ const UserDashboard = () => {
               {proposals.length > 0 ? (
                 proposals.map((proposal) => (
                   <TableRow key={proposal._id} className="company-row">
-                    <TableCell className="company-name-cell" align="center">
-                      {proposal.vendorCompany}
-                    </TableCell>
-                    <TableCell align="center">
-                      {proposal.category || "N/A"}
-                    </TableCell>
+                    <TableCell align="center">{proposal.vendorCompany}</TableCell>
+                    <TableCell align="center">{proposal.productName || "N/A"}</TableCell>
                     <TableCell align="center">
                       <span className={`status-badge ${proposal.approval.toLowerCase()}`}>
-                        {proposal.approval}
+                        {proposal.approval === "approved"
+                          ? "Accepted"
+                          : proposal.approval}
                       </span>
                     </TableCell>
                     <TableCell align="center">
@@ -208,7 +222,7 @@ const UserDashboard = () => {
                           variant="contained"
                           onClick={() => handleAcceptProposal(proposal)}
                           className="proposal-button accept-btn"
-                          disabled={proposal.approval === 'approved'}
+                          disabled={proposal.approval === "approved"}
                         >
                           Accept
                         </Button>
@@ -216,7 +230,7 @@ const UserDashboard = () => {
                           variant="contained"
                           onClick={() => handleRejectProposal(proposal)}
                           className="proposal-button reject-btn"
-                          disabled={proposal.approval === 'rejected'}
+                          disabled={proposal.approval === "rejected"}
                         >
                           Reject
                         </Button>
@@ -227,6 +241,14 @@ const UserDashboard = () => {
                         >
                           Preview
                         </Button>
+                        {(proposal.approval === "approved" || proposal.approval === "rejected") && (
+                          <IconButton
+                            color="error"
+                            onClick={() => handleResetStatus(proposal)}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>
@@ -247,7 +269,8 @@ const UserDashboard = () => {
       <Dialog open={openAcceptDialog} onClose={handleCloseDialog}>
         <DialogTitle>Confirm Acceptance</DialogTitle>
         <DialogContent>
-          Are you sure you want to accept the proposal from {selectedProposal?.vendorCompany}?
+          Are you sure you want to accept the proposal from{" "}
+          {selectedProposal?.vendorCompany}?
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
@@ -261,7 +284,8 @@ const UserDashboard = () => {
       <Dialog open={openRejectDialog} onClose={handleCloseDialog}>
         <DialogTitle>Confirm Rejection</DialogTitle>
         <DialogContent>
-          Are you sure you want to reject the proposal from {selectedProposal?.vendorCompany}?
+          Are you sure you want to reject the proposal from{" "}
+          {selectedProposal?.vendorCompany}?
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
@@ -272,12 +296,7 @@ const UserDashboard = () => {
       </Dialog>
 
       {/* Preview Modal */}
-      <Dialog
-        open={openPreviewModal}
-        onClose={handleClosePreview}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={openPreviewModal} onClose={handleClosePreview} maxWidth="md" fullWidth>
         <DialogTitle>Proposal Details</DialogTitle>
         <DialogContent>
           {selectedProposal && (
@@ -287,7 +306,6 @@ const UserDashboard = () => {
               <Typography>Vendor: {selectedProposal.vendorCompany}</Typography>
               <Typography>Price: ${selectedProposal.totalPrice}</Typography>
               <Typography>Description: {selectedProposal.description}</Typography>
-              {/* Add more details as needed */}
             </div>
           )}
         </DialogContent>

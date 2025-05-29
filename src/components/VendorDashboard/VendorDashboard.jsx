@@ -77,9 +77,16 @@ const VendorDashboard = () => {
     deliveryTime: ''
   };
 
+  const requiredFields = [
+    'vendorName', 'vendorCompany', 'vendorPhone', 'vendorEmail', 'vendorAddress',
+    'postingTitle', 'bidDate', 'offerPrice', 'quantity', 'unitPrice', 'totalPrice'
+  ];
+
   useEffect(() => {
-    const allFilled = Object.values(formState).every((v) => v?.toString().trim() !== '');
-    setIsFormValid(allFilled);
+    const allRequiredFilled = requiredFields.every(
+      (key) => formState[key]?.toString().trim() !== ''
+    );
+    setIsFormValid(allRequiredFilled);
   }, [formState]);
 
   const handleInputChange = (e) => {
@@ -89,7 +96,6 @@ const VendorDashboard = () => {
       [name]: value,
     }));
 
-    // Optional: Auto-calculate total price when quantity or unit price changes
     if (name === 'quantity' || name === 'unitPrice') {
       const quantity = name === 'quantity' ? value : formState.quantity || 0;
       const unitPrice = name === 'unitPrice' ? value : formState.unitPrice || 0;
@@ -125,13 +131,13 @@ const VendorDashboard = () => {
       });
       return;
     }
-  
+
     try {
       const vendorDataRaw = localStorage.getItem("user");
       const vendorData = vendorDataRaw ? JSON.parse(vendorDataRaw) : null;
       const vendorId = vendorData?.uuid;
       const postId = postData?.uuid;
-  
+
       if (!postId || !vendorId) {
         console.error("Missing postId or vendorId");
         setSnackbar({
@@ -141,17 +147,14 @@ const VendorDashboard = () => {
         });
         return;
       }
-  
-      console.log("Submitting proposal - Post ID:", postId, "Vendor ID:", vendorId);
-      console.log("Form data:", formState);
-  
+
       const formattedData = {
         ...formState,
         bidDate: formState.bidDate instanceof Date
           ? formState.bidDate.toISOString()
           : formState.bidDate,
       };
-  
+
       const payload = {
         ...formattedData, 
         userId: postId,
@@ -159,16 +162,16 @@ const VendorDashboard = () => {
         postId: postData?._id,
         category: postData?.category
       };
-  
+
       const result = await ProposalService.submitProposal(payload);
       console.log('Proposal submitted:', result);
-  
+
       setSnackbar({
         open: true,
         message: 'Proposal submitted successfully!',
         severity: 'success'
       });
-  
+
       handleCloseDialog();
     } catch (error) {
       console.error('Failed to submit proposal:', error);
@@ -179,8 +182,7 @@ const VendorDashboard = () => {
       });
     }
   };
-  
-  
+
   return (
     <>
       <Navbar />
@@ -322,7 +324,7 @@ const VendorDashboard = () => {
             </Grid>
           </Grid>
 
-          <Typography variant="h6" gutterBottom mt={4}>Device Specification</Typography>
+          <Typography variant="h6" gutterBottom mt={4}>Device Specification (Optional)</Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField fullWidth size="small" name="productName" label="Product Name"
