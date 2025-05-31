@@ -127,7 +127,7 @@ const VendorStatusDashboard = () => {
                       {proposal.vendorCompany || proposal.vendorName || "N/A"}
                     </TableCell>
                     <TableCell align="center">
-                      {proposal.productName || "N/A"}
+                      {proposal.postingTitle || "N/A"}
                     </TableCell>
                     <TableCell align="center">
                       {proposal.category || "N/A"}
