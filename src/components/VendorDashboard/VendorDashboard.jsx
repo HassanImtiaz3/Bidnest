@@ -111,10 +111,30 @@ const VendorDashboard = () => {
   };
 
   const handleOpenDialog = () => {
-    setFormState(fields);
+    const vendorDataRaw = localStorage.getItem("user");
+    const vendorData = vendorDataRaw ? JSON.parse(vendorDataRaw) : {};
+  
+    const today = new Date();
+
+    const prefilledFields = {
+      ...fields,
+      vendorName: `${vendorData.firstName || ''} ${vendorData.lastName || ''}`.trim(),
+      vendorCompany: vendorData.company || '',
+      vendorPhone: vendorData.phoneNumber || '',
+      vendorEmail: vendorData.email || '',
+      vendorAddress: [
+        vendorData.address?.city,
+        vendorData.address?.state,
+        vendorData.address?.country,
+        vendorData.address?.zipCode
+      ].filter(Boolean).join(', '),
+    };
+    
+    setFormState(prefilledFields);
     setSelectedDate(null);
     setOpenDialog(true);
   };
+  
 
   const handleCloseDialog = () => setOpenDialog(false);
 
