@@ -18,6 +18,9 @@ import UserDashboard from "./components/UserDashboard/UserDashboard.jsx";
 import VendorStatusDashboard from "./components/VendorStatusDashboard/VendorStatusDashboard.jsx";
 import { VendorRoute, UserRoute } from "./services/ProtectedRoute.js";
 import ScrollToTop from "./utils/scrollTop.jsx";
+import Admin from "./pages/AdminDashboard/Admin.jsx";
+import { AdminDashboard } from "./pages/AdminDashboard/AdminDashboard.jsx";
+import { AdminVendorDashboard } from "./pages/AdminDashboard/Vendor.jsx";
 
 function App() {
   return (
@@ -36,11 +39,17 @@ function App() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/why-bidnest" element={<WhyBidnest />} />
         <Route path="/post" element={<Post />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/vendor" element={<AdminVendorDashboard />} />
 
         {/* Vendor-only routes */}
         <Route element={<VendorRoute />}>
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-          <Route path="/vendor-status-dashboard" element={<VendorStatusDashboard />} />
+          <Route
+            path="/vendor-status-dashboard"
+            element={<VendorStatusDashboard />}
+          />
         </Route>
 
         {/* User-only routes */}
