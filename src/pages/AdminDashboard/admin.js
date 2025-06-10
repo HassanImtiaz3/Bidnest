@@ -33,6 +33,18 @@ export const getPaginatedVendorsWithProposal = async (page = 1, limit = 10) => {
     }
   };
 
+  export const validateAdmin = async ({ email, password }) => {
+    try {
+      const response = await api.post("/admin/login", { email, password });
+      console.log("responseeeee:", response)
+      //return;
+      return response.data;
+    } catch (error) {
+      console.error("Admin login failed:", error);
+      throw error.response?.data || { message: "Login error" };
+    }
+  };
+
 export default {
   getPaginatedUsersWithPosts,
 };

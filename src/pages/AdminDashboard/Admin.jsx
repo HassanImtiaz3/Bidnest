@@ -1,92 +1,104 @@
-// src/pages/AdminDashboard/Admin.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  Button, 
-  TextField, 
-  Card, 
-  CardContent, 
+import {
+  Button,
+  TextField,
+  Card,
+  CardContent,
   Typography,
   Box,
   CssBaseline,
-  Container
+  Container,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { validateAdmin } from "./admin"; // adjust if needed
 
-const defaultTheme = createTheme();
+const theme = createTheme();
 
-export default function Admin() {
+export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (email && password) {
-      setIsAuthenticated(true);
+  const handleLogin = async () => {
+    setErrorMsg("");
+    if (!email || !password) {
+      setErrorMsg("Please enter both email and password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { adminToken } = await validateAdmin({ email, password });
+      localStorage.setItem("adminToken", adminToken);
       navigate("/admin/dashboard");
+    } catch (error) {
+      setErrorMsg(error.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Card sx={{ width: '100%', mt: 4 }}>
-              <CardContent sx={{ p: 4 }}>
-                <Typography component="h1" variant="h5" align="center" sx={{ mb: 3 }}>
-                  Admin Login
-                </Typography>
-                <Box component="form" noValidate sx={{ mt: 1 }}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Button
-                    type="button"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                    onClick={handleLogin}
-                  >
-                    Sign In
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Box>
-        </Container>
-      </ThemeProvider>
-    );
-  }
-  return null;
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 10,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Card sx={{ width: "100%", boxShadow: 3, borderRadius: 3 }}>
+            <CardContent sx={{ p: 4 }}>
+              <Typography component="h1" variant="h5" align="center" gutterBottom>
+                Admin Login
+              </Typography>
+
+              {errorMsg && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {errorMsg}
+                </Alert>
+              )}
+
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Email Address"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleLogin}
+                disabled={loading}
+              >
+                {loading ? <CircularProgress size={24} color="inherit" /> : "Sign In"}
+              </Button>
+            </CardContent>
+          </Card>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 }

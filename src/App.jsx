@@ -12,7 +12,7 @@ import WhyBidnest from "./pages/WhyBidnestPage/Why.jsx";
 import AboutUs from "./pages/AboutUsPage/index.jsx";
 import PostNow from "./pages/PostNowPage/index.jsx";
 import Post from "./components/Post/Post";
-import ProtectedRoute from "./services/ProtectedRoute.js";
+import ProtectedRoute, { AdminRoute } from "./services/ProtectedRoute.js";
 import VendorDashboard from "./components/VendorDashboard/VendorDashboard.jsx";
 import UserDashboard from "./components/UserDashboard/UserDashboard.jsx";
 import VendorStatusDashboard from "./components/VendorStatusDashboard/VendorStatusDashboard.jsx";
@@ -40,8 +40,11 @@ function App() {
         <Route path="/why-bidnest" element={<WhyBidnest />} />
         <Route path="/post" element={<Post />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/vendor" element={<AdminVendorDashboard />} />
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/vendor" element={<AdminVendorDashboard />} />
+        </Route>
 
         {/* Vendor-only routes */}
         <Route element={<VendorRoute />}>
