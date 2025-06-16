@@ -301,11 +301,22 @@ const UserDashboard = () => {
         <DialogContent>
           {selectedProposal && (
             <div>
-              <Typography variant="h6">{selectedProposal.postingTitle}</Typography>
-              <Typography>Product: {selectedProposal.productName}</Typography>
-              <Typography>Vendor: {selectedProposal.vendorCompany}</Typography>
-              <Typography>Price: ${selectedProposal.totalPrice}</Typography>
-              <Typography>Description: {selectedProposal.description}</Typography>
+              <Typography variant="h6" gutterBottom>Bid Information</Typography>
+              <Typography><strong>Posting Title:</strong> {selectedProposal.postingTitle}</Typography>
+              <Typography><strong>Vendor Company:</strong> {selectedProposal.vendorCompany}</Typography>
+              <Typography><strong>Product Name:</strong> {selectedProposal.productName}</Typography>
+              <Typography><strong>Total Price:</strong> ${selectedProposal.totalPrice}</Typography>
+              <Typography><strong>Description:</strong> {selectedProposal.description}</Typography>
+
+              <br />
+
+              {/* Device Specification */}
+              <Typography variant="h6" gutterBottom>Device Specification</Typography>
+              <Typography><strong>Device Type:</strong> {selectedProposal.deviceType || "N/A"}</Typography>
+              <Typography><strong>Device Model:</strong> {selectedProposal.deviceModel || "N/A"}</Typography>
+              <Typography><strong>Specifications:</strong> {selectedProposal.deviceSpecs || "N/A"}</Typography>
+              <Typography><strong>Quantity:</strong> {selectedProposal.quantity || "N/A"}</Typography>
+              {/* Add more fields here if your device specification includes more */}
             </div>
           )}
         </DialogContent>

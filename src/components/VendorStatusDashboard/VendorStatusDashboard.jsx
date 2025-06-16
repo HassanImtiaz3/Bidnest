@@ -10,6 +10,11 @@ import {
   TableRow,
   Paper,
   CircularProgress,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
@@ -20,6 +25,8 @@ const VendorStatusDashboard = () => {
   const [proposals, setProposals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState(null);
 
   useEffect(() => {
     const fetchProposals = async () => {
@@ -67,6 +74,16 @@ const VendorStatusDashboard = () => {
       default:
         return status;
     }
+  };
+
+  const handleOpenModal = (proposal) => {
+    setSelectedProposal(proposal);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProposal(null);
+    setOpenModal(false);
   };
 
   if (loading) {
@@ -117,6 +134,9 @@ const VendorStatusDashboard = () => {
                 <TableCell align="center" className="company-table-head">
                   Status
                 </TableCell>
+                <TableCell align="center" className="company-table-head">
+                  Bid Details
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -139,11 +159,19 @@ const VendorStatusDashboard = () => {
                         {getDisplayStatus(proposal.approval)}
                       </span>
                     </TableCell>
+                    <TableCell align="center">
+                      <button
+                        className="bid-detail-btn"
+                        onClick={() => handleOpenModal(proposal)}
+                      >
+                        Bid Detail
+                      </button>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} align="center">
+                  <TableCell colSpan={5} align="center">
                     No proposals found
                   </TableCell>
                 </TableRow>
@@ -152,6 +180,100 @@ const VendorStatusDashboard = () => {
           </Table>
         </TableContainer>
       </Container>
+
+      {/* MODAL - dynamic content */}
+// ...your imports and component logic (unchanged)
+
+// Inside your return block, just replace the Dialog part with this:
+
+<Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
+  <DialogTitle>Bid Detail</DialogTitle>
+  <DialogContent dividers>
+    {selectedProposal && (
+      <>
+        <Typography variant="h6" gutterBottom>
+          Bid Information
+        </Typography>
+        <Table size="small" sx={{ mb: 3 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Posting Title</TableCell>
+              <TableCell>Last Date</TableCell>
+              <TableCell>Offer Price</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Unit Price</TableCell>
+              <TableCell>Total Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>{selectedProposal.postingTitle || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.lastDate || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.offerPrice || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.quantity || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.unitPrice || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.totalPrice || "N/A"}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <Typography variant="h6" gutterBottom>
+          Device Specification
+        </Typography>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Product Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Model Number</TableCell>
+              <TableCell>Color</TableCell>
+              <TableCell>Size</TableCell>
+              <TableCell>Weight</TableCell>
+              <TableCell>Warranty Info</TableCell>
+              <TableCell>Delivery Time Frame</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>{selectedProposal.productName || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.description || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.modelNumber || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.color || "N/A"}</TableCell>
+              <TableCell>{selectedProposal.size || "N/A"}</TableCell>
+
+              {(() => {
+                const spec = selectedProposal.deviceSpecification || {};
+                return (
+                  <>
+                    <TableCell>{spec.weight || "N/A"}</TableCell>
+                    <TableCell>{spec.warrantyInfo || "N/A"}</TableCell>
+                    <TableCell>{spec.deliveryTimeFrame || "N/A"}</TableCell>
+                  </>
+                );
+              })()}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button
+      onClick={handleCloseModal}
+      sx={{
+        backgroundColor: "#6a1b9a",
+        color: "white",
+        "&:hover": {
+          backgroundColor: "#4a148c",
+        },
+      }}
+    >
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
+
+
       <Footer />
     </>
   );

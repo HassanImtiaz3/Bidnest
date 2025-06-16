@@ -62,3 +62,69 @@
 .status-badge.inprocess {
   background-color: #0288d1; /* Blue */
 }
+.bid-detail-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.bid-detail-btn:hover {
+  background-color: #333;
+}
+/* Modal Title */
+.MuiDialogTitle-root {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+  font-size: 18px;
+}
+
+/* Modal Content Area */
+.MuiDialogContent-root {
+  padding: 24px;
+}
+
+/* Section Headings in Modal */
+.MuiDialogContent-root .MuiTypography-h6 {
+  margin-top: 16px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #6a1b9a;
+}
+
+/* Modal Tables */
+.MuiDialogContent-root .MuiTable-root {
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.MuiTableCell-root {
+  font-size: 14px;
+}
+
+/* Modal Footer / Close Button */
+.MuiDialogActions-root {
+  padding: 16px 24px;
+  background-color: #f9f9f9;
+}
+
+/* Responsive modal table fix */
+@media screen and (max-width: 768px) {
+  .MuiTableCell-root {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .MuiDialogTitle-root {
+    font-size: 16px;
+  }
+
+  .MuiDialogContent-root .MuiTypography-h6 {
+    font-size: 15px;
+  }
+}
