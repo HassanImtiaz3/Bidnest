@@ -181,10 +181,7 @@ const VendorStatusDashboard = () => {
         </TableContainer>
       </Container>
 
-      {/* MODAL - dynamic content */}
-// ...your imports and component logic (unchanged)
 
-// Inside your return block, just replace the Dialog part with this:
 
 <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
   <DialogTitle>Bid Detail</DialogTitle>
