@@ -65,7 +65,9 @@ const UserDashboard = () => {
         doc.text(`Product Name: ${proposal.productName}`, 10, 20);
         doc.text(`Total Price: $${proposal.totalPrice}`, 10, 30);
         doc.text(`Description: ${proposal.description}`, 10, 40);
-        doc.save(`Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`);
+        doc.save(
+          `Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`
+        );
       })
       .catch((err) => {
         console.error("Failed to generate PDF:", err);
@@ -101,7 +103,10 @@ const UserDashboard = () => {
   const handleConfirmReject = async () => {
     try {
       if (!selectedProposal) return;
-      await ProposalService.updateProposalStatus(selectedProposal._id, "rejected");
+      await ProposalService.updateProposalStatus(
+        selectedProposal._id,
+        "rejected"
+      );
       setProposals((prev) =>
         prev.map((p) =>
           p._id === selectedProposal._id ? { ...p, approval: "rejected" } : p
@@ -116,10 +121,15 @@ const UserDashboard = () => {
   const handleConfirmAccept = async () => {
     try {
       if (!selectedProposal) return;
-      await ProposalService.updateProposalStatus(selectedProposal._id, "approved");
+      await ProposalService.updateProposalStatus(
+        selectedProposal._id,
+        "ready_for_financial_round"
+      );
       setProposals((prev) =>
         prev.map((p) =>
-          p._id === selectedProposal._id ? { ...p, approval: "approved" } : p
+          p._id === selectedProposal._id
+            ? { ...p, approval: "ready_for_financial_round" }
+            : p
         )
       );
       handleCloseDialog();
@@ -195,12 +205,18 @@ const UserDashboard = () => {
               {proposals.length > 0 ? (
                 proposals.map((proposal) => (
                   <TableRow key={proposal._id} className="company-row">
-                    <TableCell align="center">{proposal.vendorCompany}</TableCell>
-                    <TableCell align="center">{proposal.productName || "N/A"}</TableCell>
                     <TableCell align="center">
-                      <span className={`status-badge ${proposal.approval.toLowerCase()}`}>
-                        {proposal.approval === "approved"
-                          ? "Accepted"
+                      {proposal.vendorCompany}
+                    </TableCell>
+                    <TableCell align="center">
+                      {proposal.productName || "N/A"}
+                    </TableCell>
+                    <TableCell align="center">
+                      <span
+                        className={`status-badge ${proposal.approval.toLowerCase()}`}
+                      >
+                        {proposal.approval === "ready_for_financial_round"
+                          ? "Ready Financial Round"
                           : proposal.approval}
                       </span>
                     </TableCell>
@@ -241,7 +257,8 @@ const UserDashboard = () => {
                         >
                           Preview
                         </Button>
-                        {(proposal.approval === "approved" || proposal.approval === "rejected") && (
+                        {(proposal.approval === "approved" ||
+                          proposal.approval === "rejected") && (
                           <IconButton
                             color="error"
                             onClick={() => handleResetStatus(proposal)}
@@ -274,7 +291,11 @@ const UserDashboard = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleConfirmAccept} color="primary" variant="contained">
+          <Button
+            onClick={handleConfirmAccept}
+            color="primary"
+            variant="contained"
+          >
             Confirm
           </Button>
         </DialogActions>
@@ -289,33 +310,68 @@ const UserDashboard = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleConfirmReject} color="error" variant="contained">
+          <Button
+            onClick={handleConfirmReject}
+            color="error"
+            variant="contained"
+          >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Preview Modal */}
-      <Dialog open={openPreviewModal} onClose={handleClosePreview} maxWidth="md" fullWidth>
+      <Dialog
+        open={openPreviewModal}
+        onClose={handleClosePreview}
+        maxWidth="md"
+        fullWidth
+      >
         <DialogTitle>Proposal Details</DialogTitle>
         <DialogContent>
           {selectedProposal && (
             <div>
-              <Typography variant="h6" gutterBottom>Bid Information</Typography>
-              <Typography><strong>Posting Title:</strong> {selectedProposal.postingTitle}</Typography>
-              <Typography><strong>Vendor Company:</strong> {selectedProposal.vendorCompany}</Typography>
-              <Typography><strong>Product Name:</strong> {selectedProposal.productName}</Typography>
-              <Typography><strong>Total Price:</strong> ${selectedProposal.totalPrice}</Typography>
-              <Typography><strong>Description:</strong> {selectedProposal.description}</Typography>
+              <Typography variant="h6" gutterBottom>
+                Bid Information
+              </Typography>
+              <Typography>
+                <strong>Posting Title:</strong> {selectedProposal.postingTitle}
+              </Typography>
+              <Typography>
+                <strong>Vendor Company:</strong>{" "}
+                {selectedProposal.vendorCompany}
+              </Typography>
+              <Typography>
+                <strong>Product Name:</strong> {selectedProposal.productName}
+              </Typography>
+              {/* <Typography><strong>Total Price:</strong> ${selectedProposal.totalPrice}</Typography> */}
+              <Typography>
+                <strong>Description:</strong> {selectedProposal.description}
+              </Typography>
 
               <br />
 
               {/* Device Specification */}
-              <Typography variant="h6" gutterBottom>Device Specification</Typography>
-              <Typography><strong>Device Type:</strong> {selectedProposal.deviceType || "N/A"}</Typography>
-              <Typography><strong>Device Model:</strong> {selectedProposal.deviceModel || "N/A"}</Typography>
-              <Typography><strong>Specifications:</strong> {selectedProposal.deviceSpecs || "N/A"}</Typography>
-              <Typography><strong>Quantity:</strong> {selectedProposal.quantity || "N/A"}</Typography>
+              <Typography variant="h6" gutterBottom>
+                Device Specification
+              </Typography>
+              <Typography>
+                <strong>Device Type:</strong>{" "}
+                {selectedProposal.category || "N/A"}
+              </Typography>
+              <Typography>
+                <strong>Device Model:</strong>{" "}
+                {selectedProposal.modelNumber || "N/A"}
+              </Typography>
+              <Typography>
+                <strong>Color:</strong> {selectedProposal.color || "N/A"}
+              </Typography>
+              <Typography>
+                <strong>Size:</strong> {selectedProposal.size || "N/A"}
+              </Typography>
+              <Typography>
+                <strong>Weight:</strong> {selectedProposal.weight || "N/A"}
+              </Typography>
               {/* Add more fields here if your device specification includes more */}
             </div>
           )}

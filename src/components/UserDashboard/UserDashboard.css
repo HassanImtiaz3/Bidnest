@@ -109,7 +109,7 @@
   display: inline-block;
 }
 
-.status-badge.approved {
+.status-badge.ready_for_financial_round {
   background-color: #28a745; /* success green */
 }
 

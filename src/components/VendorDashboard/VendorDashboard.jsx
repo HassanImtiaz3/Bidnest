@@ -78,8 +78,8 @@ const VendorDashboard = () => {
   };
 
   const requiredFields = [
-    'vendorName', 'vendorCompany', 'vendorPhone', 'vendorEmail', 'vendorAddress',
-    'postingTitle', 'bidDate', 'offerPrice', 'quantity', 'unitPrice', 'totalPrice'
+    'vendorName', 'vendorCompany', 'vendorPhone', 'vendorEmail', 'vendorAddress', 'productName', 'description'
+   // 'postingTitle', 'bidDate', 'offerPrice', 'quantity', 'unitPrice', 'totalPrice'
   ];
 
   useEffect(() => {
@@ -236,7 +236,7 @@ const VendorDashboard = () => {
         <Grid container justifyContent="center" mt={3}>
           <Grid item>
             <Button variant="contained" onClick={handleOpenDialog} className="send-proposal-button">
-              Send Proposal
+              Technical Round Proposal
             </Button>
           </Grid>
         </Grid>
@@ -288,7 +288,7 @@ const VendorDashboard = () => {
             </Grid>
           </Grid>
 
-          <Typography variant="h6" gutterBottom mt={4}>Bid Information</Typography>
+          {/* <Typography variant="h6" gutterBottom mt={4}>Bid Information</Typography>
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField fullWidth size="small" required name="postingTitle"
@@ -342,7 +342,7 @@ const VendorDashboard = () => {
                 value={formState.totalPrice || ''} onChange={handleInputChange} type="number"
               />
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Typography variant="h6" gutterBottom mt={4}>Device Specification (Optional)</Typography>
           <Grid container spacing={2}>
