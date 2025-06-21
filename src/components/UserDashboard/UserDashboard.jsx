@@ -121,17 +121,35 @@ const UserDashboard = () => {
   const handleConfirmAccept = async () => {
     try {
       if (!selectedProposal) return;
+
+      const currentStatus = selectedProposal.approval;
+
+      if (currentStatus === "bid_successful") {
+        console.log(
+          "Proposal is already marked as bid successful. No action taken."
+        );
+        return; // Do nothing
+      }
+
+      let newStatus = "";
+
+      if (currentStatus === "pending_financial") {
+        newStatus = "bid_successful";
+      } else {
+        newStatus = "ready_for_financial_round";
+      }
+
       await ProposalService.updateProposalStatus(
         selectedProposal._id,
-        "ready_for_financial_round"
+        newStatus
       );
+
       setProposals((prev) =>
         prev.map((p) =>
-          p._id === selectedProposal._id
-            ? { ...p, approval: "ready_for_financial_round" }
-            : p
+          p._id === selectedProposal._id ? { ...p, approval: newStatus } : p
         )
       );
+
       handleCloseDialog();
     } catch (error) {
       console.error("Failed to accept proposal:", error);
@@ -351,7 +369,38 @@ const UserDashboard = () => {
 
               <br />
 
+              {selectedProposal.approval === "pending_financial" && (
+                <>
+                  <br />
+                  <Typography variant="h6" gutterBottom>
+                    Price Quote
+                  </Typography>
+                  <Typography>
+                    <strong>Unit Price:</strong>{" "}
+                    {selectedProposal.unitPrice || "N/A"}
+                  </Typography>
+                  <Typography>
+                    <strong>Total Price:</strong>{" "}
+                    {selectedProposal.totalPrice || "N/A"}
+                  </Typography>
+                  <Typography>
+                    <strong>Quantity:</strong>{" "}
+                    {selectedProposal.quantity || "N/A"}
+                  </Typography>
+                  <Typography>
+                    <strong>Offer Price:</strong>{" "}
+                    {selectedProposal.offerPrice || "N/A"}
+                  </Typography>
+                  <Typography>
+                    <strong>Weight:</strong> {selectedProposal.weight || "N/A"}
+                  </Typography>
+                </>
+              )}
+
+              <br />
+
               {/* Device Specification */}
+
               <Typography variant="h6" gutterBottom>
                 Device Specification
               </Typography>
@@ -372,6 +421,7 @@ const UserDashboard = () => {
               <Typography>
                 <strong>Weight:</strong> {selectedProposal.weight || "N/A"}
               </Typography>
+
               {/* Add more fields here if your device specification includes more */}
             </div>
           )}

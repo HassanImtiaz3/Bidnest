@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
@@ -26,17 +26,27 @@ const ProposalService = {
     return response.data;
   },
 
-
   updateProposalStatus: async (proposalId, status) => {
     try {
-      const response = await api.patch(`/proposals/${proposalId}/status`, { status });
+      const response = await api.patch(`/proposals/${proposalId}/status`, {
+        status,
+      });
       return response.data;
     } catch (error) {
       console.error("Error updating proposal status:", error);
       throw error;
     }
-  }
+  },
 
+  updateProposal: async (proposalId, data) => {
+    try {
+      const response = await api.put(`/update/${proposalId}`, data);
+      return response.data;
+    } catch (error) {
+      console.error("Error updating proposal:", error);
+      throw error;
+    }
+  },
 };
 
 export default ProposalService;

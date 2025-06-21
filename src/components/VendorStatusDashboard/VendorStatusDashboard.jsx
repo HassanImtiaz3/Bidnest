@@ -229,8 +229,8 @@ const VendorStatusDashboard = () => {
       };
 
       // Submit as a new proposal
-      const result = await ProposalService.submitProposal(financialProposal);
-      await ProposalService.updateProposalStatus(proposals._id, "pending");
+      const result = await ProposalService.updateProposal(selectedFinancialProposal._id, financialProposal);
+      // await ProposalService.updateProposalStatus(proposals._id, "pending");
 
       setSnackbar({
         open: true,
@@ -311,11 +311,11 @@ const VendorStatusDashboard = () => {
             <TableBody>
               {proposals.length > 0 ? (
                 proposals
-                  .filter(
-                    (proposal) =>
-                      proposal.approval?.toLowerCase() !==
-                      "ready_for_financial_round"
-                  )
+                  // .filter(
+                  //   (proposal) =>
+                  //     proposal.approval?.toLowerCase() !==
+                  //     "ready_for_financial_round"
+                  // )
                   .map((proposal) => (
                     <TableRow key={proposal._id} className="company-row">
                       <TableCell className="company-name-cell" align="center">
@@ -402,43 +402,51 @@ const VendorStatusDashboard = () => {
         <DialogContent dividers>
           {selectedProposal && (
             <>
-              <Typography variant="h6" gutterBottom>
-                Bid Information
-              </Typography>
-              <Table size="small" sx={{ mb: 3 }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Posting Title</TableCell>
-                    <TableCell>Last Date</TableCell>
-                    <TableCell>Offer Price</TableCell>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>Unit Price</TableCell>
-                    <TableCell>Total Price</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>
-                      {selectedProposal.postingTitle || "N/A"}
-                    </TableCell>
-                    <TableCell>
-                      {selectedProposal.bidDate
-                        ? new Date(selectedProposal.bidDate)
-                            .toISOString()
-                            .split("T")[0]
-                        : "N/A"}
-                    </TableCell>
-                    <TableCell>
-                      {selectedProposal.offerPrice || "N/A"}
-                    </TableCell>
-                    <TableCell>{selectedProposal.quantity || "N/A"}</TableCell>
-                    <TableCell>{selectedProposal.unitPrice || "N/A"}</TableCell>
-                    <TableCell>
-                      {selectedProposal.totalPrice || "N/A"}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              {selectedProposal?.approval?.toLowerCase() !== "pending" && (
+                <>
+                  <Typography variant="h6" gutterBottom>
+                    Bid Information
+                  </Typography>
+                  <Table size="small" sx={{ mb: 3 }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Posting Title</TableCell>
+                        <TableCell>Last Date</TableCell>
+                        <TableCell>Offer Price</TableCell>
+                        <TableCell>Quantity</TableCell>
+                        <TableCell>Unit Price</TableCell>
+                        <TableCell>Total Price</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          {selectedProposal.postingTitle || "N/A"}
+                        </TableCell>
+                        <TableCell>
+                          {selectedProposal.bidDate
+                            ? new Date(selectedProposal.bidDate)
+                                .toISOString()
+                                .split("T")[0]
+                            : "N/A"}
+                        </TableCell>
+                        <TableCell>
+                          {selectedProposal.offerPrice || "N/A"}
+                        </TableCell>
+                        <TableCell>
+                          {selectedProposal.quantity || "N/A"}
+                        </TableCell>
+                        <TableCell>
+                          {selectedProposal.unitPrice || "N/A"}
+                        </TableCell>
+                        <TableCell>
+                          {selectedProposal.totalPrice || "N/A"}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </>
+              )}
 
               <Typography variant="h6" gutterBottom>
                 Device Specification
