@@ -7,7 +7,7 @@ import {
   InputAdornment,
   Container,
 } from "@mui/material";
-import bannerImage from "../../assets/banner.jpg";
+import bannerImage from "../../assets/banner1.jpeg";
 import SearchIcon from "@mui/icons-material/Search";
 
 export default function App() {

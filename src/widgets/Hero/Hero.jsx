@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Stack, Typography } from '@mui/material';
 
-const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
+const TwoColumnWidget = ({ image, heading, paragraph, direction = "left", imageStyle = {} }) => {
   return (
     <Box
       sx={{
@@ -13,17 +13,14 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
       }}
     >
       <Stack
-        direction={{ xs: "column", md: direction === "left" ? "row" : "row-reverse" }} // Adjusts stack order
+        direction={{ xs: "column", md: direction === "left" ? "row" : "row-reverse" }}
         spacing={4}
         alignItems="center"
       >
         {/* Image Column */}
         <Box
           flex={1}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}
+          sx={{ display: "flex", justifyContent: "center" }}
         >
           <Box
             component="img"
@@ -35,6 +32,7 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
               borderRadius: "5%",
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
               objectFit: "cover",
+              ...imageStyle, // override or extend styling
             }}
           />
         </Box>
@@ -44,7 +42,7 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
           <Typography
             variant="h1"
             sx={{
-              fontWeight: "950", 
+              fontWeight: "950",
               fontSize: { xs: "24px", sm: "32px", md: "40px" },
               mb: 2,
               color: "primary.main",
@@ -58,7 +56,7 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
             sx={{
               color: "text.primary",
               textAlign: { xs: "center", md: "left" },
-              fontWeight: "500", 
+              fontWeight: "500",
               fontSize: { xs: "16px", sm: "18px", md: "18px" },
             }}
           >
@@ -72,9 +70,10 @@ const TwoColumnWidget = ({ image, heading, paragraph, direction = "left" }) => {
 
 TwoColumnWidget.propTypes = {
   image: PropTypes.string.isRequired,
-  heading: PropTypes.string.isRequired, 
-  paragraph: PropTypes.string.isRequired, 
-  direction: PropTypes.oneOf(["left", "right"]), 
+  heading: PropTypes.string.isRequired,
+  paragraph: PropTypes.string.isRequired,
+  direction: PropTypes.oneOf(["left", "right"]),
+  imageStyle: PropTypes.object, // new prop
 };
 
 export default TwoColumnWidget;
