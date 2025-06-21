@@ -28,6 +28,8 @@ const RegistrationForm = () => {
     phoneNumber: "",
     experience: "",
     email: "",
+    description: "",
+    ntnNumber: "",
     password: "",
     confirmPassword: "",
     role: "vendor",
@@ -289,6 +291,61 @@ const RegistrationForm = () => {
                   },
                 }}
               />
+
+              <TextField
+                size="small"
+                label="Description"
+                fullWidth
+                required
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                error={Boolean(errors.description)}
+                helperText={errors.description}
+                type="text"
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#000000",
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#000000",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    color: "#000000",
+                  },
+                }}
+              />
+
+              <TextField
+                size="small"
+                label="NTN Number"
+                fullWidth
+                required
+                name="ntnNumber"
+                value={formData.ntnNumber}
+                onChange={handleChange}
+                error={Boolean(errors.ntnNumber)}
+                helperText={errors.ntnNumber || "Format: 1234567-8"}
+                type="text"
+                inputProps={{
+                  pattern: "^[0-9]{7}-[0-9]{1}$",
+                  maxLength: 9
+                }}
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#000000",
+                  },
+                  "& .MuiInputBase-input": {
+                    color: "#000000",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    color: "#000000",
+                  },
+                }}
+              />
+
+
+
             </Stack>
 
             <Stack flex={1} spacing={2}>

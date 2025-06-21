@@ -12,41 +12,38 @@ export const validateField = (fieldName, value, formData) => {
     case "productName":
       const nameRegex = /^[A-Za-z\s]+$/;
       if (!value) {
-        error = `${
-          fieldName === "firstName"
+        error = `${fieldName === "firstName"
             ? "First"
             : fieldName === "lastName"
-            ? "Last"
-            : fieldName === "contactName"
-            ? "Contact"
-            : fieldName === "productName"
-            ? "Product"
-            : "Company"
-        } name is required.`;
+              ? "Last"
+              : fieldName === "contactName"
+                ? "Contact"
+                : fieldName === "productName"
+                  ? "Product"
+                  : "Company"
+          } name is required.`;
       } else if (!nameRegex.test(value)) {
-        error = `${
-          fieldName === "firstName"
+        error = `${fieldName === "firstName"
             ? "First"
             : fieldName === "lastName"
-            ? "Last"
-            : fieldName === "contactName"
-            ? "Contact"
-            : fieldName === "productName"
-            ? "Product"
-            : "Company"
-        } name should contain only letters and spaces.`;
+              ? "Last"
+              : fieldName === "contactName"
+                ? "Contact"
+                : fieldName === "productName"
+                  ? "Product"
+                  : "Company"
+          } name should contain only letters and spaces.`;
       } else if (value.length > 50) {
-        error = `${
-          fieldName === "firstName"
+        error = `${fieldName === "firstName"
             ? "First"
             : fieldName === "lastName"
-            ? "Last"
-            : fieldName === "contactName"
-            ? "Contact"
-            : fieldName === "productName"
-            ? "Product"
-            : "Company"
-        } name cannot exceed 50 characters.`;
+              ? "Last"
+              : fieldName === "contactName"
+                ? "Contact"
+                : fieldName === "productName"
+                  ? "Product"
+                  : "Company"
+          } name cannot exceed 50 characters.`;
       }
       break;
 
@@ -140,6 +137,16 @@ export const validateField = (fieldName, value, formData) => {
         error = "Experience must be a positive number.";
       }
       break;
+    case "description":
+      if (!value) {
+        error = "Description is required.";
+      }
+      break;
+      case "ntnNumber":
+        if (!value) {
+          error = "ntnNumber is required.";
+        }
+        break;
 
     case "message":
       if (value && value.length > 500) {
