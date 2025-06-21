@@ -17,46 +17,38 @@ import {
 import Bread from "../../widgets/BackToHomeButton/BreadCrumbs.jsx";
 
 function OpenSolicitations() {
-
   const dropdownConfig = [
-    { name: "Agency Type", values: ["All Bids", "Private Bids", "State & Local", "Federal"] },
-    { 
-      name: "Category", 
+    { name: "Agency Type", values: ["All Bids"] },
+    {
+      name: "City",
       values: [
-        "Construction & Infrastructure (Building, Renovation, Roads, Bridges)",
-        "Painting & Coatings (Residential, Commercial, Industrial)",
-        "Electrical & Mechanical Services (Wiring, HVAC, Plumbing)",
-        "Telecommunications & Networking (Fiber Optic, ISP, IT Infrastructure)",
-        "Printing & Packaging (Brochures, Labels, Product Packaging)",
-        "Security & Surveillance (CCTV, Guards, Access Control)",
-        "Transportation & Logistics (Freight, Warehousing, Delivery Services)",
-        "Education & Training Services (Corporate Training, Workshops, e-Learning)",
-        "Health & Medical Supplies (Pharmaceuticals, Hospital Equipment)",
-        "Cleaning & Waste Management (Pest Control, Janitorial Services)",
-        "Marketing & Advertising (Digital Marketing, Billboards, Branding)",
-        "Event Management & Catering (Corporate Events, Food Supply)",
-        "IT & Software Solutions (Web Development, ERP Systems, Cybersecurity)",
-        "Legal & Financial Services (Consulting, Auditing, Insurance)",
-        "Manufacturing & Industrial Supplies (Raw Materials, Machinery)",
-        "Energy & Utilities (Solar Panels, Generators, Electrical Work)",
-        "Automotive & Fleet Services (Vehicle Leasing, Maintenance, Spare Parts)",
-        "Agriculture & Farming (Fertilizers, Equipment, Irrigation)",
-        "Interior Design & Furniture (Office Furniture, Home Decor)",
-        "Media & Entertainment (Photography, Video Production, PR)"
-      ]
+        "Islamabad",
+        "Karachi",
+        "Lahore",
+        "Faisalabad",
+        "Rawalpindi",
+        "Peshawar",
+        "Quetta",
+        "Multan",
+        "Hyderabad",
+        "Sialkot",
+        "Gujranwala",
+        "Bahawalpur",
+        "Sargodha",
+        "Sukkur",
+        "Mardan",
+        "Abbottabad",
+        "Mirpur",
+        "Larkana",
+        "Gujrat",
+      ],
     },
-    { 
-      name: "City", 
-      values: [
-        "Islamabad", "Karachi", "Lahore", "Faisalabad", "Rawalpindi", "Peshawar", 
-        "Quetta", "Multan", "Hyderabad", "Sialkot", "Gujranwala", "Bahawalpur", 
-        "Sargodha", "Sukkur", "Mardan", "Abbottabad", "Mirpur", "Larkana", "Gujrat"
-      ]
+    {
+      name: "Published",
+      values: ["Last 24 Hours", "Last 7 Days", "Last 30 Days"],
     },
-    { name: "Published", values: ["Last 24 Hours", "Last 7 Days", "Last 30 Days"] },
     { name: "Status", values: ["Open", "Closed", "Under Review"] },
   ];
-  
 
   const solicitations = [
     {
@@ -103,21 +95,16 @@ function OpenSolicitations() {
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
         <Bread name="Bid Search" />;
-       
         <div className="flex-grow-1">
           <div className="container text-center mt-5 mb-4">
             <Box sx={{ p: 2, backgroundColor: "#f9f9f9" }}>
-          
               {/* Title */}
               <Typography variant="h4" sx={{ mb: 3 }}>
                 Open Solicitations
               </Typography>
 
               {/* Search and Filters */}
-              <Stack
-                direction="row"
-                spacing={2}
-              >
+              <Stack direction="row" spacing={2}>
                 <TextField
                   fullWidth
                   size="small"
@@ -130,29 +117,31 @@ function OpenSolicitations() {
                   }}
                 />
                 {dropdownConfig.map((dropdown, index) => (
-                 <FormControl fullWidth size="small" key={index}>
-                 <InputLabel id={`dropdown-label-${index}`} sx={{ color: "black" }}>
-                   {dropdown.name}
-                 </InputLabel>
-                 <Select
-                   labelId={`dropdown-label-${index}`}
-                   id={`dropdown-${index}`}
-                   label={dropdown.name} // Ensure the label is applied here
-                   sx={{
-                     color: "black",
-                     "& .MuiSelect-icon": { color: "black" },
-                   }}
-                 >
-                   {dropdown.values.map((value, i) => (
-                     <MenuItem key={i} value={value}>
-                       {value}
-                     </MenuItem>
-                   ))}
-                 </Select>
-               </FormControl>
-               
+                  <FormControl fullWidth size="small" key={index}>
+                    <InputLabel
+                      id={`dropdown-label-${index}`}
+                      sx={{ color: "black" }}
+                    >
+                      {dropdown.name}
+                    </InputLabel>
+                    <Select
+                      labelId={`dropdown-label-${index}`}
+                      id={`dropdown-${index}`}
+                      label={dropdown.name} // Ensure the label is applied here
+                      sx={{
+                        color: "black",
+                        "& .MuiSelect-icon": { color: "black" },
+                      }}
+                    >
+                      {dropdown.values.map((value, i) => (
+                        <MenuItem key={i} value={value}>
+                          {value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 ))}
-                <Button
+                {/* <Button
                   variant="contained"
                   sx={{
                     flex: "1 1 auto",
@@ -165,9 +154,10 @@ function OpenSolicitations() {
                   }}
                 >
                   Search
-                </Button>
+                </Button> */}
               </Stack>
 
+              <br />
               {/* Results */}
               <Typography variant="body1" sx={{ mb: 1 }}>
                 6 results
@@ -183,18 +173,7 @@ function OpenSolicitations() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="body1">Order By</Typography>
-                <Select
-                  defaultValue="Publication Date (Newest)"
-                  sx={{ color: "black", backgroundColor: "white", borderColor: "#fff" }}
-                >
-                  <MenuItem value="Publication Date (Newest)">
-                    Publication Date (Newest)
-                  </MenuItem>
-                  <MenuItem value="Publication Date (Oldest)">
-                    Publication Date (Oldest)
-                  </MenuItem>
-                </Select>
+                <Typography variant="body1">List of Bids</Typography>
               </Box>
 
               <Paper>
@@ -214,14 +193,6 @@ function OpenSolicitations() {
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                           {solicitation.location}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant="body2" color="text.primary">
-                          Published: {solicitation.publishedDate}
-                        </Typography>
-                        <Typography variant="body2" color="text.primary">
-                          Closing: {solicitation.closingDate}
                         </Typography>
                       </Box>
                     </Box>

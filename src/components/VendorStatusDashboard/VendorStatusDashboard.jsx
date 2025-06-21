@@ -50,15 +50,19 @@ const VendorStatusDashboard = () => {
     totalPrice: "",
   });
 
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     const fetchProposals = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user || !user.uuid) {
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        if (!storedUser || !storedUser.uuid) {
           throw new Error("Vendor UUID not found in user data");
         }
 
-        const vendorId = user.uuid;
+        setUser(storedUser); // ✅ store full user
+
+        const vendorId = storedUser.uuid;
         const response = await ProposalService.getProposalsForVendor(vendorId);
         setProposals(response.proposals || []);
       } catch (err) {
@@ -229,7 +233,10 @@ const VendorStatusDashboard = () => {
       };
 
       // Submit as a new proposal
-      const result = await ProposalService.updateProposal(selectedFinancialProposal._id, financialProposal);
+      const result = await ProposalService.updateProposal(
+        selectedFinancialProposal._id,
+        financialProposal
+      );
       // await ProposalService.updateProposalStatus(proposals._id, "pending");
 
       setSnackbar({
@@ -295,6 +302,9 @@ const VendorStatusDashboard = () => {
                   Company Name
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
+                  Description
+                </TableCell>
+                <TableCell align="center" className="company-table-head">
                   Product Name
                 </TableCell>
                 <TableCell align="center" className="company-table-head">
@@ -320,6 +330,9 @@ const VendorStatusDashboard = () => {
                     <TableRow key={proposal._id} className="company-row">
                       <TableCell className="company-name-cell" align="center">
                         {proposal.vendorCompany || proposal.vendorName || "N/A"}
+                      </TableCell>
+                      <TableCell className="company-name-cell" align="center">
+                        {user.description || "N/A"}
                       </TableCell>
                       <TableCell align="center">
                         {proposal.productName || "N/A"}
