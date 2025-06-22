@@ -174,16 +174,20 @@ const UserDashboard = () => {
         y += 20;
         doc.setFontSize(11);
         doc.setFont(undefined, "bold");
-        doc.text("M. Atif Ashraf Khan", 14, y);
-        doc.text("M. Liaquat Ali", pageWidth / 2 + 10, y);
+
+        // Heading
+        doc.text("Vendor Information: ", pageWidth / 2 + 10, y);
+
+        // Vendor Info
+        y += 6;
+        doc.text(proposal.vendorName || "N/A", pageWidth / 2 + 10, y);
 
         doc.setFont(undefined, "normal");
         doc.setFontSize(10);
-        doc.text("Dy. Manager-Business Development", 14, y + 6);
-        doc.text("Senior Executive Business Development", pageWidth / 2 + 10, y + 6);
+        doc.text(proposal.description || "N/A", pageWidth / 2 + 10, y + 6);
+        doc.text(proposal.vendorPhone || "N/A", pageWidth / 2 + 10, y + 12);
 
-        doc.text("0321-4365695, 0333-8283945", 14, y + 12);
-        doc.text("0321-4125680, 0333-8283722", pageWidth / 2 + 10, y + 12);
+
 
         // Note
         y += 25;
@@ -221,7 +225,7 @@ const UserDashboard = () => {
           pageWidth / 2,
           footerY + 5,
           { align: "center" }
-        );  
+        );
 
         doc.text(
           "Registered Office: E-173, Faisal Town, S.I.T.E, Lahore, Pakistan.",
