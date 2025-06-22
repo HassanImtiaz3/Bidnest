@@ -57,22 +57,191 @@ const UserDashboard = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleDownloadProposal = (proposal) => {
-    import("jspdf")
-      .then(({ jsPDF }) => {
-        const doc = new jsPDF();
-        doc.text(`Proposal from ${proposal.vendorCompany}`, 10, 10);
-        doc.text(`Product Name: ${proposal.productName}`, 10, 20);
-        doc.text(`Total Price: $${proposal.totalPrice}`, 10, 30);
-        doc.text(`Description: ${proposal.description}`, 10, 40);
-        doc.save(
-          `Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`
+  const handleDownloadProposal = async (proposal) => {
+    try {
+      const [{ jsPDF }, autoTableModule] = await Promise.all([
+        import("jspdf"),
+        import("jspdf-autotable"),
+      ]);
+      const autoTable = autoTableModule.default;
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // Add Logo
+      const logoImg = "/logo.png";
+      const logo = new Image();
+      logo.src = logoImg;
+
+      logo.onload = () => {
+        doc.addImage(logo, "PNG", pageWidth - 60, 10, 50, 20);
+
+        // Company Info
+        doc.setFontSize(12);
+        doc.text(`Company Name:  ${proposal.vendorCompany || "Company Name"}`, 14, 20);
+
+        // Title
+        doc.setFontSize(20);
+        doc.setFont("helvetica", "bold");
+        doc.text("Quotation", pageWidth / 2, 15, { align: "center" });
+
+        // Quotation Meta
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+        const ntnLabel = "National Tax Number (NTN):";
+        const ntnValue = proposal.ntnNumber || "0627833-7";
+        doc.text(`${ntnLabel} ${ntnValue}`, pageWidth - 20, 45, { align: "right" });
+
+
+
+        // Reference
+        doc.setFontSize(11);
+        doc.setFont(undefined, "normal");
+        doc.text(`Ref: Quotation for ${proposal.productName || "Device"}`, 14, 60);
+
+        // Clean function to remove ANSI codes
+        const removeAnsi = (text) => text?.replace(/\x1B\[[0-9;]*m/g, "") || "";
+
+        // Table Content
+        const specLines = [
+          removeAnsi(proposal.productName || "Alcatel T76-CE"),
+          removeAnsi(proposal.description || "Black Corded CLI Telephone"),
+          "2 Years Replacement Warranty",
+          "For Detail Specifications Datasheet Attached"
+        ];
+        const specFormatted = specLines.join("\n");
+
+        const price = proposal.unitPrice || "11,864/-";
+        const netUnitPrice = proposal.totalPrice || "14,000/-";
+        const quantity = proposal.quantity?.toString() || "1";
+        const netAmount = proposal.totalPrice || "14,000/-";
+
+        const tableBody = [[
+          specFormatted,
+          price,
+          netUnitPrice,
+          quantity,
+          netAmount
+        ]];
+
+        autoTable(doc, {
+          startY: 70,
+          head: [["Product Specification", "Price", "Net unit Price", "Quantity", "Net Amount"]],
+          body: tableBody,
+          styles: {
+            fontSize: 10,
+            cellPadding: 4,
+            valign: "top",
+            lineColor: [0, 0, 0],
+            lineWidth: 0.2,
+          },
+          headStyles: {
+            fillColor: [0, 0, 0],        // Black background
+            textColor: [255, 255, 255],  // White text
+            fontStyle: "bold",
+            halign: "center",
+          },
+          columnStyles: {
+            0: { cellWidth: 75 },
+            1: { halign: "center" },
+            2: { halign: "center" },
+            3: { halign: "center" },
+            4: { halign: "center" },
+            5: { halign: "center" },
+          }
+        });
+
+        // Prices note
+        let y = doc.lastAutoTable.finalY + 5;
+        doc.setFont(undefined, "normal");
+        doc.text("•  Above mentioned prices are inclusive of all Taxes", 14, y);
+
+        // Terms & Conditions
+        y += 10;
+        doc.setFont(undefined, "bold");
+        doc.text("Specific Terms & Conditions", 14, y);
+        doc.setFont(undefined, "normal");
+        doc.setFontSize(10);
+        doc.text(`Quotation Validity   :   MOQ 15 Units`, 14, y + 6);
+        doc.text(`Delivery Period     :   Ex Stock While Stock Lasts All over Pakistan`, 14, y + 12);
+
+        // Digital Signature
+        y += 30;
+        doc.setFontSize(10);
+        doc.text("Digitally signed by Bidnest", 14, y);
+
+        // Footer Contacts
+        y += 20;
+        doc.setFontSize(11);
+        doc.setFont(undefined, "bold");
+        doc.text("M. Atif Ashraf Khan", 14, y);
+        doc.text("M. Liaquat Ali", pageWidth / 2 + 10, y);
+
+        doc.setFont(undefined, "normal");
+        doc.setFontSize(10);
+        doc.text("Dy. Manager-Business Development", 14, y + 6);
+        doc.text("Senior Executive Business Development", pageWidth / 2 + 10, y + 6);
+
+        doc.text("0321-4365695, 0333-8283945", 14, y + 12);
+        doc.text("0321-4125680, 0333-8283722", pageWidth / 2 + 10, y + 12);
+
+        // Note
+        y += 25;
+        doc.setFontSize(9);
+        doc.setFont(undefined, "bold");
+        doc.text("NOTE: Income Tax deduction", 14, y);
+        doc.setFont(undefined, "normal");
+        doc.text(
+          `Kindly do not deduct any tax because we are the importers /Partners of Alcatel and already paid tax at the time of import. 
+  We will provide you GD and undertaking for this with invoice.`,
+          14,
+          y + 5
         );
-      })
-      .catch((err) => {
-        console.error("Failed to generate PDF:", err);
-      });
+
+        // Final Footer at Bottom
+        const footerY = pageHeight - 35;
+
+        // Black line above footer
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.5);
+        doc.line(10, footerY - 4, pageWidth - 10, footerY - 4);
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+        doc.text(
+          "Karachi, Lahore, Islamabad, Peshawar. Toll Free: +92 3324421885,",
+          pageWidth / 2,
+          footerY,
+          { align: "center" }
+        );
+
+        doc.setFont(undefined, "normal");
+        doc.text(
+          "Telephone: +92 3324421885, Fax: +92 3324421885, E-mail: bidnest2@gmail.com, www.bidnest.com",
+          pageWidth / 2,
+          footerY + 5,
+          { align: "center" }
+        );  
+
+        doc.text(
+          "Registered Office: E-173, Faisal Town, S.I.T.E, Lahore, Pakistan.",
+          pageWidth / 2,
+          footerY + 10,
+          { align: "center" }
+        );
+
+        doc.save(`Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`);
+      };
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+    }
   };
+
+
+
+
+
+
 
   const handleAcceptProposal = (proposal) => {
     setSelectedProposal(proposal);
@@ -252,6 +421,7 @@ const UserDashboard = () => {
                         >
                           Download
                         </Button>
+
                         <Button
                           variant="contained"
                           onClick={() => handleAcceptProposal(proposal)}
@@ -277,13 +447,13 @@ const UserDashboard = () => {
                         </Button>
                         {(proposal.approval === "approved" ||
                           proposal.approval === "rejected") && (
-                          <IconButton
-                            color="error"
-                            onClick={() => handleResetStatus(proposal)}
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        )}
+                            <IconButton
+                              color="error"
+                              onClick={() => handleResetStatus(proposal)}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          )}
                       </Stack>
                     </TableCell>
                   </TableRow>
