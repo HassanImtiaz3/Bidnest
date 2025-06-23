@@ -278,7 +278,7 @@ function PostNow() {
                   )}
                 </FormControl>
                 <TextField
-                  label="Budget"
+                  label="Unit Price"
                   type="number"
                   value={formData.budget}
                   onChange={(e) =>
@@ -323,7 +323,7 @@ function PostNow() {
               </Stack>
 
               <TextField
-                label="Total Budget"
+                label="Total Price"
                 value={totalBudget}
                 InputProps={{ readOnly: true }}
                 fullWidth

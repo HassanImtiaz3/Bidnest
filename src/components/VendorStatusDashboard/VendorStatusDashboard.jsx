@@ -254,11 +254,194 @@ const VendorStatusDashboard = () => {
       console.error("Failed to submit financial proposal:", error);
       setSnackbar({
         open: true,
-        message: `Failed to submit financial proposal: ${
-          error.message || "Unknown error"
-        }`,
+        message: `Failed to submit financial proposal: ${error.message || "Unknown error"
+          }`,
         severity: "error",
       });
+    }
+  };
+
+  const handleDownloadProposal = async (proposal) => {
+    try {
+      const [{ jsPDF }, autoTableModule] = await Promise.all([
+        import("jspdf"),
+        import("jspdf-autotable"),
+      ]);
+      const autoTable = autoTableModule.default;
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // Add Logo
+      const logoImg = "/logo.png";
+      const logo = new Image();
+      logo.src = logoImg;
+
+      logo.onload = () => {
+        doc.addImage(logo, "PNG", pageWidth - 60, 10, 50, 20);
+
+        // Company Info
+        doc.setFontSize(12);
+        doc.text(`Company Name:  ${proposal.vendorCompany || "Company Name"}`, 14, 20);
+
+        // Title
+        doc.setFontSize(20);
+        doc.setFont("helvetica", "bold");
+        doc.text("Quotation", pageWidth / 2, 15, { align: "center" });
+
+        // Quotation Meta
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+        const ntnLabel = "National Tax Number (NTN):";
+        const ntnValue = proposal.ntnNumber || "0627833-7";
+        doc.text(`${ntnLabel} ${ntnValue}`, pageWidth - 20, 45, { align: "right" });
+
+
+
+        // Reference
+        doc.setFontSize(11);
+        doc.setFont(undefined, "normal");
+        doc.text(`Ref: Quotation for ${proposal.productName || "Device"}`, 14, 60);
+
+        // Clean function to remove ANSI codes
+        const removeAnsi = (text) => text?.replace(/\x1B\[[0-9;]*m/g, "") || "";
+
+        // Table Content
+        const specLines = [
+          removeAnsi(proposal.productName || "Alcatel T76-CE"),
+          removeAnsi(proposal.description || "Black Corded CLI Telephone"),
+          "2 Years Replacement Warranty",
+          "For Detail Specifications Datasheet Attached"
+        ];
+        const specFormatted = specLines.join("\n");
+
+        const price = proposal.unitPrice || "11,864/-";
+        const netUnitPrice = proposal.totalPrice || "14,000/-";
+        const quantity = proposal.quantity?.toString() || "1";
+        const netAmount = proposal.totalPrice || "14,000/-";
+
+        const tableBody = [[
+          specFormatted,
+          price,
+          netUnitPrice,
+          quantity,
+          netAmount
+        ]];
+
+        autoTable(doc, {
+          startY: 70,
+          head: [["Product Specification", "Price", "Net unit Price", "Quantity", "Net Amount"]],
+          body: tableBody,
+          styles: {
+            fontSize: 10,
+            cellPadding: 4,
+            valign: "top",
+            lineColor: [0, 0, 0],
+            lineWidth: 0.2,
+          },
+          headStyles: {
+            fillColor: [0, 0, 0],        // Black background
+            textColor: [255, 255, 255],  // White text
+            fontStyle: "bold",
+            halign: "center",
+          },
+          columnStyles: {
+            0: { cellWidth: 75 },
+            1: { halign: "center" },
+            2: { halign: "center" },
+            3: { halign: "center" },
+            4: { halign: "center" },
+            5: { halign: "center" },
+          }
+        });
+
+        // Prices note
+        let y = doc.lastAutoTable.finalY + 5;
+        doc.setFont(undefined, "normal");
+        doc.text("•  Above mentioned prices are inclusive of all Taxes", 14, y);
+
+        // Terms & Conditions
+        y += 10;
+        doc.setFont(undefined, "bold");
+        doc.text("Specific Terms & Conditions", 14, y);
+        doc.setFont(undefined, "normal");
+        doc.setFontSize(10);
+        doc.text(`Quotation Validity   :   MOQ 15 Units`, 14, y + 6);
+        doc.text(`Delivery Period     :   Ex Stock While Stock Lasts All over Pakistan`, 14, y + 12);
+
+        // Digital Signature
+        y += 30;
+        doc.setFontSize(10);
+        doc.text("Digitally signed by Bidnest", 14, y);
+
+        // Footer Contacts
+        y += 20;
+        doc.setFontSize(11);
+        doc.setFont(undefined, "bold");
+
+        // Heading
+        doc.text("Vendor Information: ", pageWidth / 2 + 10, y);
+
+        // Vendor Info
+        y += 6;
+        doc.text(proposal.vendorName || "N/A", pageWidth / 2 + 10, y);
+
+        doc.setFont(undefined, "normal");
+        doc.setFontSize(10);
+        doc.text(proposal.description || "N/A", pageWidth / 2 + 10, y + 6);
+        doc.text(proposal.vendorPhone || "N/A", pageWidth / 2 + 10, y + 12);
+
+
+
+        // Note
+        y += 25;
+        doc.setFontSize(9);
+        doc.setFont(undefined, "bold");
+        doc.text("NOTE: Income Tax deduction", 14, y);
+        doc.setFont(undefined, "normal");
+        doc.text(
+          `Kindly do not deduct any tax because we are the importers /Partners of Alcatel and already paid tax at the time of import. 
+  We will provide you GD and undertaking for this with invoice.`,
+          14,
+          y + 5
+        );
+
+        // Final Footer at Bottom
+        const footerY = pageHeight - 35;
+
+        // Black line above footer
+        doc.setDrawColor(0);
+        doc.setLineWidth(0.5);
+        doc.line(10, footerY - 4, pageWidth - 10, footerY - 4);
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+        doc.text(
+          "Karachi, Lahore, Islamabad, Peshawar. Toll Free: +92 3324421885,",
+          pageWidth / 2,
+          footerY,
+          { align: "center" }
+        );
+
+        doc.setFont(undefined, "normal");
+        doc.text(
+          "Telephone: +92 3324421885, Fax: +92 3324421885, E-mail: bidnest2@gmail.com, www.bidnest.com",
+          pageWidth / 2,
+          footerY + 5,
+          { align: "center" }
+        );
+
+        doc.text(
+          "Registered Office: E-173, Faisal Town, S.I.T.E, Lahore, Pakistan.",
+          pageWidth / 2,
+          footerY + 10,
+          { align: "center" }
+        );
+
+        doc.save(`Proposal_${proposal.vendorCompany}_${proposal.productName}.pdf`);
+      };
+    } catch (error) {
+      console.error("PDF generation failed:", error);
     }
   };
 
@@ -357,7 +540,7 @@ const VendorStatusDashboard = () => {
                             {getDisplayStatus(proposal.approval)}
                           </span>
 
-                          {proposal.approval?.toLowerCase() ===
+                          {/* {proposal.approval?.toLowerCase() ===
                             "ready_for_financial_round" && (
                             <Button
                               variant="contained"
@@ -370,7 +553,29 @@ const VendorStatusDashboard = () => {
                             >
                               Financial Round
                             </Button>
+                          )} */}
+                          {proposal.approval?.toLowerCase() === "ready_for_financial_round" && (
+                            <Button
+                              variant="contained"
+                              size="small"
+                              sx={{ backgroundColor: "#1976d2", textTransform: "none" }}
+                              onClick={() => handleOpenFinancialModal(proposal)}
+                            >
+                              Financial Round
+                            </Button>
                           )}
+
+                          {proposal.approval?.toLowerCase() === "bid_successful" && (
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              sx={{ color: "green", borderColor: "green", textTransform: "none" }}
+                              onClick={() => handleDownloadProposal(proposal)} // implement this function
+                            >
+                              Download
+                            </Button>
+                          )}
+
                         </div>
                       </TableCell>
 
@@ -439,8 +644,8 @@ const VendorStatusDashboard = () => {
                         <TableCell>
                           {selectedProposal.bidDate
                             ? new Date(selectedProposal.bidDate)
-                                .toISOString()
-                                .split("T")[0]
+                              .toISOString()
+                              .split("T")[0]
                             : "N/A"}
                         </TableCell>
                         <TableCell>

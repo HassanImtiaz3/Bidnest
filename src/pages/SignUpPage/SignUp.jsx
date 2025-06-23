@@ -323,14 +323,20 @@ const RegistrationForm = () => {
                 required
                 name="ntnNumber"
                 value={formData.ntnNumber}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const isValid = /^[0-9]{0,7}-?[0-9]{0,1}$/.test(value);
+                  if (isValid || value === "") {
+                    handleChange(e);
+                  }
+                }}
                 error={Boolean(errors.ntnNumber)}
                 helperText={errors.ntnNumber || "Format: 1234567-8"}
-                type="text"
                 inputProps={{
-                  pattern: "^[0-9]{7}-[0-9]{1}$",
-                  maxLength: 9
+                  maxLength: 9,
+                  inputMode: "numeric",
                 }}
+                type="text"
                 sx={{
                   "& .MuiInputLabel-root": {
                     color: "#000000",
@@ -343,6 +349,7 @@ const RegistrationForm = () => {
                   },
                 }}
               />
+
 
 
 
