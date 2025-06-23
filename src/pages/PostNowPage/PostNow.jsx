@@ -24,9 +24,11 @@ const HiddenInput = styled("input")({
 });
 
 function PostNow() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    contactName: "",
+    contactName: user ? `${user.firstName} ${user.lastName}` : "",
     companyName: "",
     productName: "",
     quantity: "",
@@ -206,9 +208,7 @@ function PostNow() {
                 <TextField
                   label="Contact Name"
                   value={formData.contactName}
-                  onChange={(e) =>
-                    handleChange("contactName", e.target.value)
-                  }
+                  onChange={(e) => handleChange("contactName", e.target.value)}
                   onBlur={() => handleBlur("contactName")}
                   fullWidth
                   error={touched.contactName && !!errors.contactName}
@@ -218,9 +218,7 @@ function PostNow() {
                 <TextField
                   label="Company Name"
                   value={formData.companyName}
-                  onChange={(e) =>
-                    handleChange("companyName", e.target.value)
-                  }
+                  onChange={(e) => handleChange("companyName", e.target.value)}
                   onBlur={() => handleBlur("companyName")}
                   fullWidth
                   error={touched.companyName && !!errors.companyName}
@@ -233,9 +231,7 @@ function PostNow() {
                 <TextField
                   label="Product Name"
                   value={formData.productName}
-                  onChange={(e) =>
-                    handleChange("productName", e.target.value)
-                  }
+                  onChange={(e) => handleChange("productName", e.target.value)}
                   onBlur={() => handleBlur("productName")}
                   fullWidth
                   error={touched.productName && !!errors.productName}
@@ -259,7 +255,10 @@ function PostNow() {
               </Stack>
 
               <Stack direction="row" spacing={2}>
-                <FormControl fullWidth error={touched.category && !!errors.category}>
+                <FormControl
+                  fullWidth
+                  error={touched.category && !!errors.category}
+                >
                   <InputLabel>Category</InputLabel>
                   <Select
                     value={formData.category}

@@ -29,6 +29,7 @@ function OpenSolicitations() {
   const [selectedPublished, setSelectedPublished] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBidType, setSelectedBidType] = useState("");
 
   const dropdownConfig = [
     { name: "Bid Type", values: ["All Bids"] },
@@ -127,6 +128,7 @@ function OpenSolicitations() {
                 const isStatusDropdown = dropdown.name === "Status";
                 const isPublishedDropdown = dropdown.name === "Published";
                 const isCategoryDropdown = dropdown.name === "category";
+                const isBidTypeDropdown = dropdown.name === "Bid Type";
 
                 return (
                   <FormControl fullWidth size="small" key={index}>
@@ -151,6 +153,8 @@ function OpenSolicitations() {
                           ? selectedPublished
                           : isCategoryDropdown
                           ? selectedCategory
+                          : isBidTypeDropdown
+                          ? selectedBidType
                           : ""
                       }
                       onChange={
@@ -160,6 +164,8 @@ function OpenSolicitations() {
                           ? (e) => setSelectedPublished(e.target.value)
                           : isCategoryDropdown
                           ? (e) => setSelectedCategory(e.target.value)
+                          : isBidTypeDropdown
+                          ? (e) => setSelectedBidType(e.target.value)
                           : undefined
                       }
                     >

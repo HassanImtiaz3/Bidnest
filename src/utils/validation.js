@@ -149,7 +149,7 @@ export const validateField = (fieldName, value, formData) => {
         break;
 
     case "message":
-      if (value && value.length > 500) {
+      if (value && value.length > 1000) {
         error = "Message cannot exceed 500 characters.";
       }
       break;
