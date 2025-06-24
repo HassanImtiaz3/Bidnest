@@ -22,6 +22,8 @@ import Admin from "./pages/AdminDashboard/Admin.jsx";
 import { AdminDashboard } from "./pages/AdminDashboard/AdminDashboard.jsx";
 import { AdminVendorDashboard } from "./pages/AdminDashboard/Vendor.jsx";
 
+
+
 function App() {
   return (
     <Router>
@@ -40,6 +42,7 @@ function App() {
         <Route path="/why-bidnest" element={<WhyBidnest />} />
         <Route path="/post" element={<Post />} />
         <Route path="/admin" element={<Admin />} />
+        
 
         <Route element={<AdminRoute />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />

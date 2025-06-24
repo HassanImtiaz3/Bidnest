@@ -13,6 +13,7 @@ import ProcurementNotices from "../../widgets/Notices/Notices";
 import EnrollmentSection from "../../widgets/UserOnboarding/Onboarding";
 import { Container, Box } from "@mui/material";
 import PostABid from "../../widgets/PostABid/PostABid";
+import StatsCounter from "../../widgets/StatsCounter/StatsCounter";
 
 
 const Home = () => {
@@ -53,6 +54,7 @@ const Home = () => {
             <CustomWidget2 />
           </ResponsiveStack>
           <EnrollmentSection />
+          <StatsCounter />
           <Typography
             variant="h1"
             sx={{
@@ -64,9 +66,10 @@ const Home = () => {
             INFO <span style={{ color: "#673de6" }}>DESK</span>
           </Typography>
 
+            
           <ResponsiveStack>
             <IconGrid />
-            <Accordion />
+            <Accordion /> 
           </ResponsiveStack>
           <PostABid />
         </Container>

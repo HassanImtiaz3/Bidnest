@@ -193,7 +193,7 @@ function VendorLogin() {
               <Typography variant="body2" textAlign="center">
                 Don't have an account?{" "}
                 <a
-                  href="/vendor-registration"
+                  href="/registration"
                   style={{ color: "#673de6", textDecoration: "none" }}
                 >
                   Register here
