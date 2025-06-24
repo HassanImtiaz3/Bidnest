@@ -81,8 +81,7 @@ const UserDashboard = () => {
         doc.setFont(undefined, "bold");
 
         const companyName = `Company Name: ${proposal.vendorCompany || "Company Name"}`;
-        doc.text(companyName, 14, 47); // Left aligned at x=14
-        //        //doc.text(`Company Name:  ${proposal.vendorCompany || "Company Name"}`, 14, 20);
+        doc.text(companyName, 14, 47); 
 
         // Title
         doc.setFontSize(20);
