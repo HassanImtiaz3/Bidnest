@@ -77,8 +77,12 @@ const UserDashboard = () => {
         doc.addImage(logo, "PNG", pageWidth - 60, 10, 50, 20);
 
         // Company Info
-        doc.setFontSize(12);
-        doc.text(`Company Name:  ${proposal.vendorCompany || "Company Name"}`, 14, 20);
+        doc.setFontSize(10);
+        doc.setFont(undefined, "bold");
+
+        const companyName = `Company Name: ${proposal.vendorCompany || "Company Name"}`;
+        doc.text(companyName, 14, 47); // Left aligned at x=14
+        //        //doc.text(`Company Name:  ${proposal.vendorCompany || "Company Name"}`, 14, 20);
 
         // Title
         doc.setFontSize(20);
