@@ -233,7 +233,7 @@ function OpenSolicitations() {
                                   ).toLocaleDateString()
                                 : "-"}
                             </TableCell>
-                            <TableCell>${proposal.offerPrice}</TableCell>
+                            <TableCell>PKR {proposal.offerPrice}</TableCell>
                             <TableCell>{proposal.approval}</TableCell>
                           </TableRow>
                         ))}
