@@ -273,12 +273,13 @@ const VendorStatusDashboard = () => {
       const pageHeight = doc.internal.pageSize.getHeight();
 
       // Add Logo
-      const logoImg = "/logo.png";
+      const logoImg = "/logo2.png";
       const logo = new Image();
       logo.src = logoImg;
 
       logo.onload = () => {
-        doc.addImage(logo, "PNG", pageWidth - 60, 10, 50, 20);
+        doc.addImage(logo, "PNG", pageWidth - 70, 10, 35, 35);
+
 
         // Company Info
         doc.setFontSize(10);
