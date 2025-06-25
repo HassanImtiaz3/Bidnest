@@ -1,24 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  TextField,
-  Stack,
   Box,
   Typography,
-  InputAdornment,
   Container,
 } from "@mui/material";
 import bannerImage from "../../assets/banner1.jpeg";
-import SearchIcon from "@mui/icons-material/Search";
 
 export default function App() {
+  const quotes = [
+    "Your best bid starts here.",
+    "Win more with every bid.",
+    "Where smart bids meet success.",
+  ];
+
+  const [text, setText] = useState("");
+  const [quoteIndex, setQuoteIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentQuote = quotes[quoteIndex];
+    let typingSpeed = deleting ? 50 : 100;
+
+    const timeout = setTimeout(() => {
+      if (!deleting && charIndex < currentQuote.length) {
+        setText(currentQuote.substring(0, charIndex + 1));
+        setCharIndex(charIndex + 1);
+      } else if (deleting && charIndex > 0) {
+        setText(currentQuote.substring(0, charIndex - 1));
+        setCharIndex(charIndex - 1);
+      } else {
+        setDeleting(!deleting);
+        if (!deleting) {
+          setTimeout(() => setDeleting(true), 1500); // hold text before deleting
+        } else {
+          setQuoteIndex((quoteIndex + 1) % quotes.length);
+        }
+      }
+    }, typingSpeed);
+
+    return () => clearTimeout(timeout);
+  }, [charIndex, deleting, quoteIndex, quotes]);
+
   return (
     <header>
       <Box
         sx={{
-          background: `url(${bannerImage}) no-repeat center center / cover`,
+          background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${bannerImage}) no-repeat center center / cover`,
           maxHeight: "650px",
           paddingY: { xs: "20%", sm: "12%" },
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
         }}
       >
         <Container maxWidth="md">
@@ -29,7 +59,7 @@ export default function App() {
               width: "100%",
             }}
           >
-            {/* Heading */}
+            {/* Main Heading */}
             <Typography
               variant="h3"
               sx={{
@@ -41,35 +71,27 @@ export default function App() {
               Find government bids matching <br /> your business.
             </Typography>
 
-            {/* Search Bar */}
-            <Box mt={2}>
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={1}
-                alignItems="left"
-                sx={{ width: "100%" }}
-              >
-                <TextField
-                  variant="outlined"
-                  placeholder="Search for bids..."
-                  sx={{
-                    backgroundColor: "white",
-                    borderRadius: 1,
-                    width: "100%",
-                    maxWidth: { xs: "100%", sm: "90%", md: "700px" },
-                    height: "46px",
-                  }}
-                  InputProps={{
-                    sx: { height: "46px" },
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Stack>
-            </Box>
+            {/* Animated Quote */}
+            <Typography
+              variant="h5"
+              sx={{
+                mt: 4, // Increased margin-top
+                pt: 1,
+                fontWeight: 600,
+                minHeight: "48px",
+                fontSize: { xs: "1.1rem", sm: "1.5rem", md: "1.8rem" },
+                fontFamily: "'Segoe UI', 'Roboto', sans-serif",
+                background: "linear-gradient(90deg, #ffffff, #ffd700)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                textShadow: "0 0 5px rgba(255, 255, 255, 0.5)",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                animation: "blink 0.8s step-end infinite",
+              }}
+            >
+              {text}
+            </Typography>
           </Box>
         </Container>
       </Box>
